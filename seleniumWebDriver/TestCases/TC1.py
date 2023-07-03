@@ -30,5 +30,16 @@ class FirstTestCase(unittest.TestCase,HomePage):
         self.assertTrue(homepage.verifySpecificTravelOptionsDisplayed(self,"Attractions"))
         self.assertTrue(homepage.verifySpecificTravelOptionsDisplayed(self,"Airport taxis"))
 
+    def test3_VerifyCurrencyScreenFunctionality(self):
+        homepage = HomePage
+        #homepage.closeUnwantedPopup(self)
+        self.assertTrue(homepage.verifySpecificButtonDisplayed(self,"INR"))
+        homepage.clickOnSpecificButton(self,"INR")
+        self.assertTrue(homepage.verifySpecificAreaLabel(self,"Select your currency","div"))
+        self.assertTrue(homepage.verifySpecificCurrencyOnSelectCurrencyPopup(self,"Hong Kong Dollar"))
+        self.assertTrue(homepage.verifySpecificCurrencyOnSelectCurrencyPopup(self,"United Arab Emirates Dirham"))
+        homepage.clickOnSpecificCurrencyOnSelectCurrencyPopup(self,"United Arab Emirates Dirham")
+        self.assertTrue(homepage.verifySpecificAreaLabel(self,"Prices in United Arab Emirates Dirham"))
+
     if __name__ == '__main__':
         unittest.main()
