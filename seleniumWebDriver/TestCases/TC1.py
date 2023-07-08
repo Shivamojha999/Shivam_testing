@@ -40,6 +40,10 @@ class FirstTestCase(unittest.TestCase,HomePage):
         self.assertTrue(homepage.verifySpecificCurrencyOnSelectCurrencyPopup(self,"United Arab Emirates Dirham"))
         homepage.clickOnSpecificCurrencyOnSelectCurrencyPopup(self,"United Arab Emirates Dirham")
         self.assertTrue(homepage.verifySpecificAreaLabel(self,"Prices in United Arab Emirates Dirham"))
+        homepage.clickOnSpecificButton(self,"AED")
+        self.assertTrue(homepage.verifySpecificCurrencyOnSelectCurrencyPopup(self,"Hong Kong Dollar"))
+        homepage.clickOnSpecificCurrencyOnSelectCurrencyPopup(self,"New Taiwan Dollar")
+        self.assertTrue(homepage.verifySpecificButtonDisplayed(self,"TWD"))
 
     if __name__ == '__main__':
         unittest.main()

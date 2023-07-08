@@ -22,9 +22,13 @@ class CommonPage(Interface):
 
     def hoverTo(self,element):
         action = ActionChains(self.driver)
-        action.move_to_element(element)
+        action.move_to_element(element).perform()
 
     def waitUntilPageRefreshed(self):
         # Wait for the page to be refreshed
         WebDriverWait(self.driver, 10).until(expected_conditions.presence_of_all_elements_located((By.CSS_SELECTOR, "*")))
         #WebDriverWait(driver, 10).until(lambda driver: driver.refreshed)
+
+    def waitUntilFrameLoadAndSwitch(self,xpathOfFrame):
+        wait = WebDriverWait(self.driver,20)
+        wait.until(expected_conditions.frame_to_be_available_and_switch_to_it(self.driver.find_element(By.XPATH,xpathOfFrame)))
