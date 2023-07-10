@@ -45,5 +45,19 @@ class FirstTestCase(unittest.TestCase,HomePage):
         homepage.clickOnSpecificCurrencyOnSelectCurrencyPopup(self,"New Taiwan Dollar")
         self.assertTrue(homepage.verifySpecificButtonDisplayed(self,"TWD"))
 
+    def test4_VerifySelectLanguageScreenFunctionality(self):
+        homepage = HomePage
+        #homepage.closeUnwantedPopup(self)
+        self.assertTrue(homepage.verifySpecificAreaLabel(self,"Language: English (US)"))
+        homepage.clickOnSpecificAreaLabel(self,"Language: English (US)")
+        self.assertTrue(homepage.verifySpecificAreaLabel(self,"Select your language","div"))
+        self.assertTrue(homepage.verifySpecificLanguageOnSelectLanguagePopup(self,"Íslenska"))
+        homepage.clickOnSpecificLanguageOnSelectLanguagePopup(self,"Íslenska")
+        self.assertTrue(homepage.verifySpecificAreaLabel(self,"Tungumál: Íslenska"))
+        homepage.clickOnSpecificAreaLabel(self,"Tungumál: Íslenska")
+        self.assertTrue(homepage.verifySpecificLanguageOnSelectLanguagePopup(self,"हिन्दी"))
+        homepage.clickOnSpecificLanguageOnSelectLanguagePopup(self,"हिन्दी")
+        self.assertTrue(homepage.verifySpecificAreaLabel(self,"भाषा: हिन्दी"))
+
     if __name__ == '__main__':
         unittest.main()
