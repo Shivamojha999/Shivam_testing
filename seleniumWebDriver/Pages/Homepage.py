@@ -9,6 +9,7 @@ class HomePage(CommonPage):
     lblUnwantedPopup = ".//*[@role='dialog']"
     lstSpecificTabs = ".//*[@aria-label='What are you looking for?']"
     lblSelectCurrency = ".//div[@aria-label='Select your currency']"
+    lblSelectLanguage = ".//div[@data-testid='selection-modal']"
 
     '''
     created By: Shivam Ojha
@@ -165,5 +166,40 @@ class HomePage(CommonPage):
             self.hoverTo(self.driver.find_elements(By.XPATH,self.lblSelectCurrency+"//ul/li//span")[i])
             if(self.driver.find_elements(By.XPATH,self.lblSelectCurrency+"//ul/li//span")[i].text.__contains__(currencyName)):
                 self.driver.find_element(By.XPATH,self.lblSelectCurrency+"//ul/li//span[contains(text(),'"+currencyName+"')]").click()
+                break
+        self.waitUntilPageRefreshed()
+
+    '''
+      created By: Shivam Ojha
+      since: 10 July 2023
+      desc: This method is used to verify Specific language On Select language Popup
+      param: languageName
+      return: boolean
+      '''
+    def verifySpecificLanguageOnSelectLanguagePopup(self,languageName):
+        self.waitUntilPageRefreshed()
+        self.waitUntilPageReady(self.lblSelectLanguage)
+        elements = len(self.driver.find_elements(By.XPATH,self.lblSelectLanguage+"//ul/li//span"))
+        for i in range(elements):
+            self.hoverTo(self.driver.find_elements(By.XPATH,self.lblSelectLanguage+"//ul/li//span")[i])
+            if(self.driver.find_elements(By.XPATH,self.lblSelectLanguage+"//ul/li//span")[i].text.__contains__(languageName)):
+                return self.driver.find_element(By.XPATH,self.lblSelectLanguage+"//ul/li//span[contains(text(),'"+languageName+"')]").is_displayed()
+        return False
+
+    '''
+      created By: Shivam Ojha
+      since: 10 July 2023
+      desc: This method is used to click on Specific language On Select language Popup
+      param: languageName
+      return: none
+      '''
+    def clickOnSpecificLanguageOnSelectLanguagePopup(self,languageName):
+        self.waitUntilPageRefreshed()
+        self.waitUntilPageReady(self.lblSelectLanguage)
+        elements = len(self.driver.find_elements(By.XPATH,self.lblSelectLanguage+"//ul/li//span"))
+        for i in range(elements):
+            self.hoverTo(self.driver.find_elements(By.XPATH,self.lblSelectLanguage+"//ul/li//span")[i])
+            if(self.driver.find_elements(By.XPATH,self.lblSelectLanguage+"//ul/li//span")[i].text.__contains__(languageName)):
+                self.driver.find_element(By.XPATH,self.lblSelectLanguage+"//ul/li//span[contains(text(),'"+languageName+"')]").click()
                 break
         self.waitUntilPageRefreshed()
