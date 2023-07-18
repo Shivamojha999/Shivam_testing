@@ -70,7 +70,7 @@ class HomePage(CommonPage):
     def verifyUnwantedPopupClosed(self):
         self.waitUntilPageRefreshed()
         self.waitUntilPageReady(self.lblPageBody)
-        return self.driver.find_element(By.XPATH,self.lblUnwantedPopup).is_displayed()
+        return len(self.driver.find_elements(By.XPATH,self.lblUnwantedPopup)) == 0
 
     '''
     created By: Shivam Ojha
