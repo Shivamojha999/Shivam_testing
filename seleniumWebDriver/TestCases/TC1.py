@@ -59,5 +59,12 @@ class FirstTestCase(unittest.TestCase,HomePage):
         homepage.clickOnSpecificLanguageOnSelectLanguagePopup(self,"हिन्दी")
         self.assertTrue(homepage.verifySpecificAreaLabel(self,"भाषा: हिन्दी"))
 
+    def test5_VerifyDatesApiWorking(self):
+        homepage = HomePage
+        homepage.getCurrentDate(self,"%y/%m/%d")
+        homepage.getPastFutureDateByDays(self,"%Y-%m-%d",1,"p")
+        homepage.getPastFutureDateByMonths(self,"%Y-%m-%d",1,"f")
+        homepage.getPastFutureDateByYears(self,"%Y-%m-%d",1,"p")
+
     if __name__ == '__main__':
         unittest.main()
