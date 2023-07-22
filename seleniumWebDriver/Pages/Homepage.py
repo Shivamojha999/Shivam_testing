@@ -1,4 +1,6 @@
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions
+from selenium.webdriver.support.wait import WebDriverWait
 
 from seleniumWebDriver.Pages.CommonPage import CommonPage
 
@@ -70,6 +72,8 @@ class HomePage(CommonPage):
     def verifyUnwantedPopupClosed(self):
         self.waitUntilPageRefreshed()
         self.waitUntilPageReady(self.lblPageBody)
+        wait = WebDriverWait(self.driver,20)
+        wait.until(expected_conditions.invisibility_of_element(self.driver.find_element(By.XPATH,self.lblUnwantedPopup)))
         return len(self.driver.find_elements(By.XPATH,self.lblUnwantedPopup)) == 0
 
     '''

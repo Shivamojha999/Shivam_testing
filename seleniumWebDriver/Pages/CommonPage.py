@@ -1,4 +1,5 @@
-from datetime import datetime
+import datetime
+from dateutil.relativedelta import relativedelta
 
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
@@ -27,7 +28,6 @@ class CommonPage(Interface):
         self.driver.implicitly_wait(20)
         wait = WebDriverWait(self.driver,20)
         wait.until(expected_conditions.visibility_of(self.driver.find_element(By.XPATH,xpathOfElement)))
-        self.driver.implicitly_wait(0)
 
     '''
     created By: Shivam Ojha
@@ -69,31 +69,57 @@ class CommonPage(Interface):
     desc: This method is used to get Current Date In Specific Fromat
     return: String
     param: format
-    %a: The abbreviated weekday name.
-    %A: The full weekday name.
-    %b: The abbreviated month name.
-    %B: The full month name.
-    %c: The complete date and time, in local format.
-    %d: The day of the month, as a zero-padded decimal number.
-    %e: The day of the month, as a decimal number.
-    %f: The microsecond, as a decimal number.
-    %H: The hour (24-hour clock), as a zero-padded decimal number.
-    %I: The hour (12-hour clock), as a zero-padded decimal number.
-    %j: The day of the year, as a zero-padded decimal number.
-    %m: The month as a zero-padded decimal number.
-    %M: The minute, as a zero-padded decimal number.
-    %p: The locale's equivalent of either AM or PM.
-    %S: The second, as a zero-padded decimal number.
-    %U: The week number of the year, with Sunday as the first day of the week, as a zero-padded decimal number.
-    %W: The week number of the year, with Monday as the first day of the week, as a zero-padded decimal number.
-    %x: The date, in local format.
-    %X: The time, in local format.
-    %y: The year, as a zero-padded decimal number without a century.
-    %Y: The year, as a four-digit number.
-    %Z: The time zone name.
-    %%: A literal % character.
     '''
     def getCurrentDate(self,format):
-        current_date = datetime.today()
-        formatted_date = current_date.strftime(format)
-        return formatted_date
+        return datetime.date.today().strftime(format)
+
+    '''
+    created By: Shivam Ojha
+    since: 23 July 2023
+    desc: This method is used to get Past Future Date By Days In Specific Fromat
+    return: String
+    param: format,days,pastFuture
+    '''
+    def getPastFutureDateByDays(self,format,days,pastFuture):
+        if (pastFuture=="f" or pastFuture=="F"):
+            futureDate = datetime.date.today() + datetime.timedelta(days=days)
+            return futureDate.strftime(format)
+        elif(pastFuture=="p" or pastFuture=="P"):
+            pastDate = datetime.date.today() - datetime.timedelta(days=days)
+            return pastDate.strftime(format)
+        else:
+            return None
+
+    '''
+    created By: Shivam Ojha
+    since: 23 July 2023
+    desc: This method is used to get Past Future Date By Months In Specific Fromat
+    return: String
+    param: format,month,pastFuture
+    '''
+    def getPastFutureDateByMonths(selfformat,format,month,pastFuture):
+        if (pastFuture=="f" or pastFuture=="F"):
+            futureDate = datetime.date.today() + relativedelta(months=month)
+            return futureDate.strftime(format)
+        elif(pastFuture=="p" or pastFuture=="P"):
+            pastDate = datetime.date.today() - relativedelta(months=month)
+            return pastDate.strftime(format)
+        else:
+            return None
+
+    '''
+    created By: Shivam Ojha
+    since: 23 July 2023
+    desc: This method is used to get Past Future Date By Years In Specific Fromat
+    return: String
+    param: format,year,pastFuture
+    '''
+    def getPastFutureDateByYears(selfformat,format,year,pastFuture):
+        if (pastFuture=="f" or pastFuture=="F"):
+            futureDate = datetime.date.today() + relativedelta(years=year)
+            return futureDate.strftime(format)
+        elif(pastFuture=="p" or pastFuture=="P"):
+            pastDate = datetime.date.today() - relativedelta(years=year)
+            return pastDate.strftime(format)
+        else:
+            return None
