@@ -12,6 +12,7 @@ class HomePage(CommonPage):
     lstSpecificTabs = ".//*[@aria-label='What are you looking for?']"
     lblSelectCurrency = ".//div[@aria-label='Select your currency']"
     lblSelectLanguage = ".//div[@data-testid='selection-modal']"
+    lblSearchBoxes = ".//div[@class='hero-banner-searchbox']"
 
     '''
     created By: Shivam Ojha
@@ -207,3 +208,41 @@ class HomePage(CommonPage):
                 self.driver.find_element(By.XPATH,self.lblSelectLanguage+"//ul/li//span[contains(text(),'"+languageName+"')]").click()
                 break
         self.waitUntilPageRefreshed()
+
+    '''
+      created By: Shivam Ojha
+      since: 13 Aug 2023
+      desc: This method is used to click On Select Location Input Box
+      param: none
+      return: none
+      '''
+    def clickOnSelectLocationInputBox(self):
+        self.waitUntilPageRefreshed()
+        self.waitUntilPageReady(self.lblSearchBoxes)
+        self.driver.find_element(By.XPATH,self.lblSearchBoxes+"//input[@name='ss']").click()
+
+    '''
+      created By: Shivam Ojha
+      since: 13 Aug 2023
+      desc: This method is used to search And Select Location
+      param: locationName
+      return: none
+      '''
+    def searchAndSelectLocation(self,locationName):
+        self.waitUntilPageRefreshed()
+        self.waitUntilPageReady(self.lblSearchBoxes)
+        self.driver.find_element(By.XPATH,self.lblSearchBoxes+"//input[@name='ss']").send_keys(locationName)
+        self.waitUntilPageReady(self.lblSearchBoxes+"//ul[@data-testid]")
+        self.driver.find_element(By.XPATH,self.lblSearchBoxes+"//ul[@data-testid]/li//div[text()='"+locationName+"']").click()
+
+    '''
+      created By: Shivam Ojha
+      since: 13 Aug 2023
+      desc: This method is used to verify Location Selected
+      param: nameToVerify
+      return: boolean
+      '''
+    def verifyLocationSelected(self,nameToVerify):
+        self.waitUntilPageRefreshed()
+        self.waitUntilPageReady(self.lblSearchBoxes)
+        return self.driver.find_element(By.XPATH,self.lblSearchBoxes+"//input[@name='ss']").get_attribute('value').__contains__(nameToVerify)

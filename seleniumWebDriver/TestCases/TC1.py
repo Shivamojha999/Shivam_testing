@@ -62,10 +62,17 @@ class FirstTestCase(unittest.TestCase,HomePage):
     def test5_VerifyDatesApiWorking(self):
         homepage = HomePage
         homepage.getCurrentDate(self,"%y/%m/%d")
-        homepage.getCurrentDate(self,"%#d") 
+        homepage.getCurrentDate(self,"%#d")
         homepage.getPastFutureDateByDays(self,"%Y-%m-%d",1,"p")
         homepage.getPastFutureDateByMonths(self,"%Y-%m-%d",1,"f")
         homepage.getPastFutureDateByYears(self,"%Y-%m-%d",1,"p")
+
+    def test6_VerifyFunctionalityOfWhereToGoSearchBox(self):
+        homepage = HomePage
+        #homepage.closeUnwantedPopup(self)
+        homepage.clickOnSelectLocationInputBox(self)
+        homepage.searchAndSelectLocation(self,"Lucknow")
+        self.assertTrue(homepage.verifyLocationSelected(self,"Lucknow"))
 
     if __name__ == '__main__':
         unittest.main()
