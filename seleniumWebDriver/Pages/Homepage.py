@@ -13,6 +13,24 @@ class HomePage(CommonPage):
     lblSelectCurrency = ".//div[@aria-label='Select your currency']"
     lblSelectLanguage = ".//div[@data-testid='selection-modal']"
     lblSearchBoxes = ".//div[@class='hero-banner-searchbox']"
+    lblDatePicker = "//div[@data-testid='searchbox-datepicker-calendar']"
+
+    '''
+    created By: Shivam Ojha
+    since: 05 Sept 2023
+    desc: This constructor method will set default filter of home page whenever it is called OR class object created
+    return: none
+    param: none
+    '''
+    def __init__(self):
+        self.waitUntilPageRefreshed()
+        self.waitUntilPageReady(self.lblPageBody)
+        self.driver.find_element(By.XPATH,".//*[@data-testid='header-language-picker-trigger']").click()
+        self.clickOnSpecificLanguageOnSelectLanguagePopup("English (US)")
+        self.waitUntilPageRefreshed()
+        self.driver.find_element(By.XPATH,".//*[@data-testid='header-currency-picker-trigger']").click()
+        self.clickOnSpecificCurrencyOnSelectCurrencyPopup("Indian Rupee")
+        self.waitUntilPageRefreshed()
 
     '''
     created By: Shivam Ojha
@@ -246,3 +264,39 @@ class HomePage(CommonPage):
         self.waitUntilPageRefreshed()
         self.waitUntilPageReady(self.lblSearchBoxes)
         return self.driver.find_element(By.XPATH,self.lblSearchBoxes+"//input[@name='ss']").get_attribute('value').__contains__(nameToVerify)
+
+    '''
+      created By: Shivam Ojha
+      since: 03 Sept 2023
+      desc: This method is used to click On select date Input Box
+      param: none
+      return: none
+      '''
+    def clickOnSelectDateInputBox(self):
+        self.waitUntilPageRefreshed()
+        self.waitUntilPageReady(self.lblSearchBoxes)
+        self.driver.find_element(By.XPATH,self.lblSearchBoxes+"//div[@data-testid='searchbox-dates-container']").click()
+
+    '''
+      created By: Shivam Ojha
+      since: 03 Sept 2023
+      desc: This method is used to verify calender opens
+      param: none
+      return: boolean
+      '''
+    def verifyCalenderOpens(self):
+        self.waitUntilPageRefreshed()
+        self.waitUntilPageReady(self.lblDatePicker)
+        return self.driver.find_element(By.XPATH,self.lblDatePicker).is_displayed()
+
+    '''
+      created By: Shivam Ojha
+      since: 03 Sept 2023
+      desc: This method is used to verify Specific Month Opened On Date Picker
+      param: month
+      return: boolean
+      '''
+    def verifySpecificMonthOpenedOnDatePicker(self,month):
+        self.waitUntilPageRefreshed()
+        self.waitUntilPageReady(self.lblDatePicker)
+        return self.driver.find_element(By.XPATH,self.lblDatePicker+"//h3[contains(text(),'"+month+"')]").is_displayed()
