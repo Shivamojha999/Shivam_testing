@@ -21,58 +21,78 @@ class FirstTestCase(unittest.TestCase,HomePage):
         self.assertTrue(homepage.verifyUnwantedPopupClosed(self))
 
     def test2_VerifyAllTabsVisibleOnMainPage(self):
-        homepage = HomePage
+        homepage = HomePage()
         #homepage.closeUnwantedPopup(self)
-        self.assertTrue(homepage.verifySpecificTravelOptionsDisplayed(self,"Stays"))
-        self.assertTrue(homepage.verifySpecificTravelOptionsDisplayed(self,"Flights"))
-        self.assertTrue(homepage.verifySpecificTravelOptionsDisplayed(self,"Flight + Hotel"))
-        self.assertTrue(homepage.verifySpecificTravelOptionsDisplayed(self,"Car rentals"))
-        self.assertTrue(homepage.verifySpecificTravelOptionsDisplayed(self,"Attractions"))
-        self.assertTrue(homepage.verifySpecificTravelOptionsDisplayed(self,"Airport taxis"))
+        self.assertTrue(homepage.verifySpecificTravelOptionsDisplayed("Stays"))
+        self.assertTrue(homepage.verifySpecificTravelOptionsDisplayed("Flights"))
+        self.assertTrue(homepage.verifySpecificTravelOptionsDisplayed("Flight + Hotel"))
+        self.assertTrue(homepage.verifySpecificTravelOptionsDisplayed("Car rentals"))
+        self.assertTrue(homepage.verifySpecificTravelOptionsDisplayed("Attractions"))
+        self.assertTrue(homepage.verifySpecificTravelOptionsDisplayed("Airport taxis"))
 
     def test3_VerifyCurrencyScreenFunctionality(self):
-        homepage = HomePage
-        #homepage.closeUnwantedPopup(self)
-        self.assertTrue(homepage.verifySpecificButtonDisplayed(self,"INR"))
-        homepage.clickOnSpecificButton(self,"INR")
-        self.assertTrue(homepage.verifySpecificAreaLabel(self,"Select your currency","div"))
-        self.assertTrue(homepage.verifySpecificCurrencyOnSelectCurrencyPopup(self,"Hong Kong Dollar"))
-        self.assertTrue(homepage.verifySpecificCurrencyOnSelectCurrencyPopup(self,"United Arab Emirates Dirham"))
-        homepage.clickOnSpecificCurrencyOnSelectCurrencyPopup(self,"United Arab Emirates Dirham")
-        self.assertTrue(homepage.verifySpecificAreaLabel(self,"Prices in United Arab Emirates Dirham"))
-        homepage.clickOnSpecificButton(self,"AED")
-        self.assertTrue(homepage.verifySpecificCurrencyOnSelectCurrencyPopup(self,"Hong Kong Dollar"))
-        homepage.clickOnSpecificCurrencyOnSelectCurrencyPopup(self,"New Taiwan Dollar")
-        self.assertTrue(homepage.verifySpecificButtonDisplayed(self,"TWD"))
+        try:
+            homepage = HomePage()
+            #homepage.closeUnwantedPopup(self)
+            self.assertTrue(homepage.verifySpecificButtonDisplayed("INR"))
+            homepage.clickOnSpecificButton("INR")
+            self.assertTrue(homepage.verifySpecificAreaLabel("Select your currency","div"))
+            self.assertTrue(homepage.verifySpecificCurrencyOnSelectCurrencyPopup("Hong Kong Dollar"))
+            self.assertTrue(homepage.verifySpecificCurrencyOnSelectCurrencyPopup("United Arab Emirates Dirham"))
+            homepage.clickOnSpecificCurrencyOnSelectCurrencyPopup("United Arab Emirates Dirham")
+            self.assertTrue(homepage.verifySpecificAreaLabel("Prices in United Arab Emirates Dirham"))
+            homepage.clickOnSpecificButton("AED")
+            self.assertTrue(homepage.verifySpecificCurrencyOnSelectCurrencyPopup("Hong Kong Dollar"))
+            homepage.clickOnSpecificCurrencyOnSelectCurrencyPopup("New Taiwan Dollar")
+            self.assertTrue(homepage.verifySpecificButtonDisplayed("TWD"))
+        finally:
+            self.hardRefresh()
+            HomePage()
 
     def test4_VerifySelectLanguageScreenFunctionality(self):
-        homepage = HomePage
-        #homepage.closeUnwantedPopup(self)
-        self.assertTrue(homepage.verifySpecificAreaLabel(self,"Language: English (US)"))
-        homepage.clickOnSpecificAreaLabel(self,"Language: English (US)")
-        self.assertTrue(homepage.verifySpecificAreaLabel(self,"Select your language","div"))
-        self.assertTrue(homepage.verifySpecificLanguageOnSelectLanguagePopup(self,"Íslenska"))
-        homepage.clickOnSpecificLanguageOnSelectLanguagePopup(self,"Íslenska")
-        self.assertTrue(homepage.verifySpecificAreaLabel(self,"Tungumál: Íslenska"))
-        homepage.clickOnSpecificAreaLabel(self,"Tungumál: Íslenska")
-        self.assertTrue(homepage.verifySpecificLanguageOnSelectLanguagePopup(self,"हिन्दी"))
-        homepage.clickOnSpecificLanguageOnSelectLanguagePopup(self,"हिन्दी")
-        self.assertTrue(homepage.verifySpecificAreaLabel(self,"भाषा: हिन्दी"))
+        try:
+            homepage = HomePage()
+            #homepage.closeUnwantedPopup(self)
+            self.assertTrue(homepage.verifySpecificAreaLabel("Language: English (US)"))
+            homepage.clickOnSpecificAreaLabel("Language: English (US)")
+            self.assertTrue(homepage.verifySpecificAreaLabel("Select your language","div"))
+            self.assertTrue(homepage.verifySpecificLanguageOnSelectLanguagePopup("Íslenska"))
+            homepage.clickOnSpecificLanguageOnSelectLanguagePopup("Íslenska")
+            self.assertTrue(homepage.verifySpecificAreaLabel("Tungumál: Íslenska"))
+            homepage.clickOnSpecificAreaLabel("Tungumál: Íslenska")
+            self.assertTrue(homepage.verifySpecificLanguageOnSelectLanguagePopup("हिन्दी"))
+            homepage.clickOnSpecificLanguageOnSelectLanguagePopup("हिन्दी")
+            self.assertTrue(homepage.verifySpecificAreaLabel("भाषा: हिन्दी"))
+        finally:
+            self.hardRefresh()
+            HomePage()
+
+
 
     def test5_VerifyDatesApiWorking(self):
-        homepage = HomePage
-        homepage.getCurrentDate(self,"%y/%m/%d")
-        homepage.getCurrentDate(self,"%#d")
-        homepage.getPastFutureDateByDays(self,"%Y-%m-%d",1,"p")
-        homepage.getPastFutureDateByMonths(self,"%Y-%m-%d",1,"f")
-        homepage.getPastFutureDateByYears(self,"%Y-%m-%d",1,"p")
+        homepage = HomePage()
+        homepage.getCurrentDate("%y/%m/%d")
+        homepage.getCurrentDate("%#d")
+        homepage.getPastFutureDateByDays("%Y-%m-%d",1,"p")
+        homepage.getPastFutureDateByMonths("%Y-%m-%d",1,"f")
+        homepage.getPastFutureDateByYears("%Y-%m-%d",1,"p")
 
     def test6_VerifyFunctionalityOfWhereToGoSearchBox(self):
-        homepage = HomePage
+        homepage = HomePage()
         #homepage.closeUnwantedPopup(self)
-        homepage.clickOnSelectLocationInputBox(self)
-        homepage.searchAndSelectLocation(self,"Lucknow")
-        self.assertTrue(homepage.verifyLocationSelected(self,"Lucknow"))
+        homepage.clickOnSelectLocationInputBox()
+        homepage.searchAndSelectLocation("Lucknow")
+        self.assertTrue(homepage.verifyLocationSelected("Lucknow"))
+
+    def test7_VerifyCalenderDesign(self):
+        homepage = HomePage()
+        #homepage.closeUnwantedPopup(self)
+        currentMonth = homepage.getCurrentDate("%B")
+        futureMonth = homepage.getPastFutureDateByMonths("%B",1,"f")
+        homepage.clickOnSelectDateInputBox()
+        self.assertTrue(homepage.verifyCalenderOpens())
+        self.assertTrue(homepage.verifySpecificMonthOpenedOnDatePicker(currentMonth))
+        self.assertTrue(homepage.verifySpecificMonthOpenedOnDatePicker(futureMonth))
 
     if __name__ == '__main__':
         unittest.main()

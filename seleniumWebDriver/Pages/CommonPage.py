@@ -123,3 +123,13 @@ class CommonPage(Interface):
             return pastDate.strftime(format)
         else:
             return None
+
+    '''
+    created By: Shivam Ojha
+    since: 05 Sept 2023
+    desc: This method is used to hard refresh any page
+    return: none
+    param: none
+    '''
+    def hardRefresh(self):
+        self.driver.refresh()
