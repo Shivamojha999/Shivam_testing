@@ -22,7 +22,6 @@ class FirstTestCase(unittest.TestCase,HomePage):
 
     def test2_VerifyAllTabsVisibleOnMainPage(self):
         homepage = HomePage()
-        #homepage.closeUnwantedPopup(self)
         self.assertTrue(homepage.verifySpecificTravelOptionsDisplayed("Stays"))
         self.assertTrue(homepage.verifySpecificTravelOptionsDisplayed("Flights"))
         self.assertTrue(homepage.verifySpecificTravelOptionsDisplayed("Flight + Hotel"))
@@ -33,7 +32,6 @@ class FirstTestCase(unittest.TestCase,HomePage):
     def test3_VerifyCurrencyScreenFunctionality(self):
         try:
             homepage = HomePage()
-            #homepage.closeUnwantedPopup(self)
             self.assertTrue(homepage.verifySpecificButtonDisplayed("INR"))
             homepage.clickOnSpecificButton("INR")
             self.assertTrue(homepage.verifySpecificAreaLabel("Select your currency","div"))
@@ -52,7 +50,6 @@ class FirstTestCase(unittest.TestCase,HomePage):
     def test4_VerifySelectLanguageScreenFunctionality(self):
         try:
             homepage = HomePage()
-            #homepage.closeUnwantedPopup(self)
             self.assertTrue(homepage.verifySpecificAreaLabel("Language: English (US)"))
             homepage.clickOnSpecificAreaLabel("Language: English (US)")
             self.assertTrue(homepage.verifySpecificAreaLabel("Select your language","div"))
@@ -67,8 +64,6 @@ class FirstTestCase(unittest.TestCase,HomePage):
             self.hardRefresh()
             HomePage()
 
-
-
     def test5_VerifyDatesApiWorking(self):
         homepage = HomePage()
         homepage.getCurrentDate("%y/%m/%d")
@@ -79,20 +74,29 @@ class FirstTestCase(unittest.TestCase,HomePage):
 
     def test6_VerifyFunctionalityOfWhereToGoSearchBox(self):
         homepage = HomePage()
-        #homepage.closeUnwantedPopup(self)
         homepage.clickOnSelectLocationInputBox()
         homepage.searchAndSelectLocation("Lucknow")
         self.assertTrue(homepage.verifyLocationSelected("Lucknow"))
 
     def test7_VerifyCalenderDesign(self):
         homepage = HomePage()
-        #homepage.closeUnwantedPopup(self)
         currentMonth = homepage.getCurrentDate("%B")
         futureMonth = homepage.getPastFutureDateByMonths("%B",1,"f")
         homepage.clickOnSelectDateInputBox()
         self.assertTrue(homepage.verifyCalenderOpens())
         self.assertTrue(homepage.verifySpecificMonthOpenedOnDatePicker(currentMonth))
         self.assertTrue(homepage.verifySpecificMonthOpenedOnDatePicker(futureMonth))
+
+    def test8_SelectDateVerification(self):
+        homepage = HomePage()
+        futureMonth = homepage.getPastFutureDateByMonths("%B",3,"f")
+        futureDate = homepage.getPastFutureDateByMonths("%#d",3,"f")
+        futureDateByDay = homepage.getPastFutureDateByDays("%#d",95,"f")
+        homepage.clickOnSelectDateInputBox()
+        homepage.selectDateOnDatePicker(futureMonth,futureDate)
+        homepage.selectDateOnDatePicker(futureMonth,futureDateByDay)
+        futureDateFormatted = homepage.getPastFutureDateByMonths("%b %#d",3,"f")
+        self.assertTrue(homepage.verifySpecificDateSelected(futureDateFormatted))
 
     if __name__ == '__main__':
         unittest.main()

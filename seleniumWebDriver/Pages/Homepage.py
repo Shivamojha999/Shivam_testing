@@ -1,3 +1,4 @@
+from selenium.common import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
@@ -25,6 +26,7 @@ class HomePage(CommonPage):
     def __init__(self):
         self.waitUntilPageRefreshed()
         self.waitUntilPageReady(self.lblPageBody)
+        #self.closeUnwantedPopup()
         self.driver.find_element(By.XPATH,".//*[@data-testid='header-language-picker-trigger']").click()
         self.clickOnSpecificLanguageOnSelectLanguagePopup("English (US)")
         self.waitUntilPageRefreshed()
@@ -300,3 +302,39 @@ class HomePage(CommonPage):
         self.waitUntilPageRefreshed()
         self.waitUntilPageReady(self.lblDatePicker)
         return self.driver.find_element(By.XPATH,self.lblDatePicker+"//h3[contains(text(),'"+month+"')]").is_displayed()
+
+    '''
+      created By: Shivam Ojha
+      since: 17 Sept 2023
+      desc: This method is used to select date On Date Picker
+      param: month,date
+      return: none
+      '''
+    def selectDateOnDatePicker(self,month,date):
+        self.waitUntilPageRefreshed()
+        flag = False
+        elementDisplayed = False
+        self.waitUntilPageReady(self.lblDatePicker)
+        while(flag==False):
+            try:
+                elementDisplayed = self.driver.find_element(By.XPATH, self.lblDatePicker + "//h3[contains(text(),'" + month + "')]").is_displayed()
+            except NoSuchElementException:
+                elementDisplayed = False
+            if(elementDisplayed):
+                flag = True
+                self.driver.find_element(By.XPATH,self.lblDatePicker+"//h3[contains(text(),'"+month+"')]/parent::div//tr/td/span/span[text()='"+date+"']").click()
+            else:
+                self.driver.find_element(By.XPATH,self.lblDatePicker+"//button[last()]").click()
+
+    '''
+      created By: Shivam Ojha
+      since: 17 Sept 2023
+      desc: This method is used to verify date selected On Date Picker
+      param: dataToVerify
+      return: boolean
+      '''
+    def verifySpecificDateSelected(self,dataToVerify):
+        self.waitUntilPageRefreshed()
+        self.waitUntilPageReady(self.lblSearchBoxes)
+        actualData =  self.driver.find_element(By.XPATH,self.lblSearchBoxes+"//div[@data-testid='searchbox-dates-container']").text
+        return actualData.strip().replace("\n","").__contains__(dataToVerify)
