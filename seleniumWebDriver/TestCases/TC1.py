@@ -1,6 +1,7 @@
 import unittest
 
 from seleniumWebDriver.Pages.Homepage import HomePage
+from seleniumWebDriver.Pages.SearchResultPage import SearchResultPage
 
 
 class FirstTestCase(unittest.TestCase,HomePage):
@@ -97,6 +98,19 @@ class FirstTestCase(unittest.TestCase,HomePage):
         homepage.selectDateOnDatePicker(futureMonth,futureDateByDay)
         futureDateFormatted = homepage.getPastFutureDateByMonths("%b %#d",3,"f")
         self.assertTrue(homepage.verifySpecificDateSelected(futureDateFormatted))
+
+    def test9_VerifySearchFunctionality(self):
+        homepage = HomePage()
+        homepage.clickOnSelectLocationInputBox()
+        homepage.searchAndSelectLocation("Goa")
+        futureMonth = homepage.getPastFutureDateByMonths("%B",1,"f")
+        futureDate = homepage.getPastFutureDateByMonths("%#d",1,"f")
+        futureDateByDay = homepage.getPastFutureDateByDays("%#d",35,"f")
+        homepage.selectDateOnDatePicker(futureMonth,futureDate)
+        homepage.selectDateOnDatePicker(futureMonth,futureDateByDay)
+        homepage.clickOnSearchButton()
+        searchResultPage = SearchResultPage()
+        self.assertTrue(searchResultPage.verifySearchedCityDisplayed("Goa"))
 
     if __name__ == '__main__':
         unittest.main()

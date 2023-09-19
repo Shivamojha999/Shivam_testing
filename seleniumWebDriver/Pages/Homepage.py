@@ -14,7 +14,8 @@ class HomePage(CommonPage):
     lblSelectCurrency = ".//div[@aria-label='Select your currency']"
     lblSelectLanguage = ".//div[@data-testid='selection-modal']"
     lblSearchBoxes = ".//div[@class='hero-banner-searchbox']"
-    lblDatePicker = "//div[@data-testid='searchbox-datepicker-calendar']"
+    lblDatePicker = ".//div[@data-testid='searchbox-datepicker-calendar']"
+    btnSearch = ".//button[@type='submit']"
 
     '''
     created By: Shivam Ojha
@@ -338,3 +339,15 @@ class HomePage(CommonPage):
         self.waitUntilPageReady(self.lblSearchBoxes)
         actualData =  self.driver.find_element(By.XPATH,self.lblSearchBoxes+"//div[@data-testid='searchbox-dates-container']").text
         return actualData.strip().replace("\n","").__contains__(dataToVerify)
+
+    '''
+      created By: Shivam Ojha
+      since: 19 Sept 2023
+      desc: This method is used to click on search button
+      param: none
+      return: none
+      '''
+    def clickOnSearchButton(self):
+        self.waitUntilPageRefreshed()
+        self.waitUntilPageReady(self.btnSearch)
+        self.driver.find_element(By.XPATH,self.btnSearch+"/span[text()='Search']").click()
