@@ -5,8 +5,9 @@ from seleniumWebDriver.Pages.CommonPage import CommonPage
 
 class SearchResultPage(CommonPage):
 
-    lblNavigator = "//nav[@aria-label='Navigation history menu (breadcrumbs)']"
-    lblSearchResults = "//*[@id='basiclayout']"
+    lblNavigator = ".//nav[@aria-label='Navigation history menu (breadcrumbs)']"
+    lblSearchResults = ".//*[@id='basiclayout']"
+    lblFilters = ".//*[@id='basiclayout']/parent::div"
 
 
     '''
@@ -32,3 +33,16 @@ class SearchResultPage(CommonPage):
         self.waitUntilPageRefreshed()
         self.waitUntilPageReady(self.lblSearchResults)
         return self.driver.find_element(By.XPATH,self.lblSearchResults+"//h1[contains(text(),'"+cityName+"')]").is_displayed()
+
+    '''
+    created By: Shivam Ojha
+    since: 24 Sept 2023
+    desc: This method is used to verify Specific Filter Option Displayed
+    param: filterName, optionName
+    return: boolean
+    '''
+    def verifySpecificFilterOptionDisplayed(self,filterName,optionName):
+        self.waitUntilPageRefreshed()
+        self.waitUntilPageReady(self.lblFilters)
+        self.scrollUsingJs(self.lblFilters+"//h3[text()='"+filterName+"']/parent::div/parent::div//label//div",optionName)
+        return self.driver.find_element(By.XPATH,self.lblFilters+"//h3[text()='"+filterName+"']/parent::div/parent::div//label//div[contains(text(),'"+optionName+"')]").is_displayed()
