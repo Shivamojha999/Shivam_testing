@@ -3,7 +3,7 @@ from selenium.webdriver.common.by import By
 from seleniumWebDriver.Pages.CommonPage import CommonPage
 
 
-class SearchResultPage(CommonPage):
+class SearchResultStaysPage(CommonPage):
 
     lblNavigator = ".//nav[@aria-label='Navigation history menu (breadcrumbs)']"
     lblSearchResults = ".//*[@id='basiclayout']"
