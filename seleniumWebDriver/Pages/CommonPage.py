@@ -151,3 +151,16 @@ class CommonPage(Interface):
             if (elements[i].text.__contains__(targetText)):
                 return elements[i]
         return None
+
+    '''
+      created By: Shivam Ojha
+      since: 04 Oct 2023
+      desc: This method is used to navigate To HomePage
+      param: none
+      return: none
+      '''
+    def navigateToHomePage(self):
+        self.waitUntilPageRefreshed()
+        self.waitUntilPageReady(".//span[@data-testid='header-logo']")
+        self.driver.find_element(By.XPATH,".//span[@data-testid='header-logo']").click()
+

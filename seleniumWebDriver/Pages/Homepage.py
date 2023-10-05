@@ -16,6 +16,7 @@ class HomePage(CommonPage):
     lblSearchBoxes = ".//div[@class='hero-banner-searchbox']"
     lblDatePicker = ".//div[@data-testid='searchbox-datepicker-calendar']"
     btnSearch = ".//button[@type='submit']"
+    lblSelectMembers = ".//div[@data-testid='occupancy-popup']"
 
     '''
     created By: Shivam Ojha
@@ -27,7 +28,7 @@ class HomePage(CommonPage):
     def __init__(self):
         self.waitUntilPageRefreshed()
         self.waitUntilPageReady(self.lblPageBody)
-        #self.closeUnwantedPopup()
+        self.closeUnwantedPopup()
         self.driver.find_element(By.XPATH,".//*[@data-testid='header-language-picker-trigger']").click()
         self.clickOnSpecificLanguageOnSelectLanguagePopup("English (US)")
         self.waitUntilPageRefreshed()
@@ -69,8 +70,13 @@ class HomePage(CommonPage):
     '''
     def closeUnwantedPopup(self,elementTag="button"):
         self.waitUntilPageRefreshed()
-        self.waitUntilPageReady(self.lblUnwantedPopup)
-        self.driver.find_element(By.XPATH,self.lblUnwantedPopup+"//"+elementTag).click()
+        popupappears = False
+        try:
+            popupappears = self.driver.find_element(By.XPATH,self.lblUnwantedPopup+"//"+elementTag).is_displayed()
+        except NoSuchElementException:
+            popupappears = False
+        if popupappears:
+            self.driver.find_element(By.XPATH,self.lblUnwantedPopup+"//"+elementTag).click()
 
     '''
     created By: Shivam Ojha
@@ -351,3 +357,57 @@ class HomePage(CommonPage):
         self.waitUntilPageRefreshed()
         self.waitUntilPageReady(self.btnSearch)
         self.driver.find_element(By.XPATH,self.btnSearch+"/span[text()='Search']").click()
+
+    '''
+      created By: Shivam Ojha
+      since: 03 Oct 2023
+      desc: This method is used to click On Members Input Box
+      param: none
+      return: none
+      '''
+    def clickOnMembersInputBox(self):
+        self.waitUntilPageRefreshed()
+        self.waitUntilPageReady(self.lblSearchBoxes)
+        self.driver.find_element(By.XPATH,self.lblSearchBoxes+"//button[contains(text(),'adults')]").click()
+
+    '''
+      created By: Shivam Ojha
+      since: 03 Oct 2023
+      desc: This method is used to click On Specific Member Count Increase Decrease Buttons
+      param: labelName,addSub
+      return: none
+      '''
+    def clickOnSpecificMemberCountIncreaseDecreaseButtons(self,labelName,addSub):
+        self.waitUntilPageRefreshed()
+        buttonIndex = "0"
+        self.waitUntilPageReady(self.lblSelectMembers)
+        if addSub.lower() == "add":
+            buttonIndex = "2"
+        elif addSub.lower() == "sub":
+            buttonIndex = "1"
+        self.driver.find_element(By.XPATH,self.lblSelectMembers+"//div/label[text()='"+labelName+"']/parent::div/parent::div//button["+buttonIndex+"]").click()
+
+    '''
+      created By: Shivam Ojha
+      since: 03 Oct 2023
+      desc: This method is used to get Specific Member Count
+      param: labelName
+      return: int
+      '''
+    def getSpecificMemberCount(self,labelName):
+        self.waitUntilPageRefreshed()
+        self.waitUntilPageReady(self.lblSelectMembers)
+        actualCount = self.driver.find_element(By.XPATH,self.lblSelectMembers+"//div/label[text()='"+labelName+"']/parent::div/following-sibling::div/span").text
+        return int(actualCount)
+
+    '''
+      created By: Shivam Ojha
+      since: 03 Oct 2023
+      desc: This method is used to verify Specific Member Count
+      param: labelName,value
+      return: boolean
+      '''
+    def verifySpecificMemberCount(self,labelName,value):
+        self.waitUntilPageRefreshed()
+        self.waitUntilPageReady(self.lblSelectMembers)
+        return self.driver.find_element(By.XPATH,self.lblSelectMembers+"//div/label[text()='"+labelName+"']/parent::div/following-sibling::div/span").text.__eq__(value)
