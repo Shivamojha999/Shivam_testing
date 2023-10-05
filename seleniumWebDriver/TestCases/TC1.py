@@ -1,7 +1,7 @@
 import unittest
 
 from seleniumWebDriver.Pages.Homepage import HomePage
-from seleniumWebDriver.Pages.SearchResultPage import SearchResultPage
+from seleniumWebDriver.Pages.SearchResultStaysPage import SearchResultStaysPage
 
 
 class FirstTestCase(unittest.TestCase,HomePage):
@@ -109,8 +109,8 @@ class FirstTestCase(unittest.TestCase,HomePage):
         homepage.selectDateOnDatePicker(futureMonth,futureDate)
         homepage.selectDateOnDatePicker(futureMonth,futureDateByDay)
         homepage.clickOnSearchButton()
-        searchResultPage = SearchResultPage()
-        self.assertTrue(searchResultPage.verifySearchedCityDisplayed("Goa"))
+        searchResultStaysPage = SearchResultStaysPage()
+        self.assertTrue(searchResultStaysPage.verifySearchedCityDisplayed("Goa"))
 
     if __name__ == '__main__':
         unittest.main()

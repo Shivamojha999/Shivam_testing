@@ -1,7 +1,7 @@
 import unittest
 
 from seleniumWebDriver.Pages.Homepage import HomePage
-from seleniumWebDriver.Pages.SearchResultPage import SearchResultPage
+from seleniumWebDriver.Pages.SearchResultStaysPage import SearchResultStaysPage
 
 
 class SecondTestCase(unittest.TestCase,HomePage):
@@ -25,8 +25,8 @@ class SecondTestCase(unittest.TestCase,HomePage):
             homepage.selectDateOnDatePicker(futureMonth,futureDate)
             homepage.selectDateOnDatePicker(futureMonth,futureDateByDay)
             homepage.clickOnSearchButton()
-            searchResultPage = SearchResultPage()
-            self.assertTrue(searchResultPage.verifySpecificFilterOptionDisplayed("City","Old Goa"))
+            searchResultStaysPage = SearchResultStaysPage()
+            self.assertTrue(searchResultStaysPage.verifySpecificFilterOptionDisplayed("City","Old Goa"))
         finally:
             self.hardRefresh()
             self.navigateToHomePage()
