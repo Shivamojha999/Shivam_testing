@@ -1,5 +1,6 @@
 import unittest
 
+from seleniumWebDriver.Pages.FlightsPage import FlightsPage
 from seleniumWebDriver.Pages.Homepage import HomePage
 from seleniumWebDriver.Pages.SearchResultStaysPage import SearchResultStaysPage
 
@@ -51,3 +52,9 @@ class SecondTestCase(unittest.TestCase,HomePage):
             homepage.clickOnSpecificMemberCountIncreaseDecreaseButtons("Adults","sub")
             homepage.clickOnSpecificMemberCountIncreaseDecreaseButtons("Children","sub")
             homepage.clickOnSpecificMemberCountIncreaseDecreaseButtons("Rooms","sub")
+
+    def test3_VerifyUserCanSelectHeaderOptions(self):
+        homepage = HomePage()
+        homepage.clickOnSpecificTravelOptionsDisplayed("Flights")
+        flightsPage = FlightsPage()
+        self.assertTrue(flightsPage.verifySpecificHeaderOptionGetSelected("Flights"))
