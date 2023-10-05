@@ -411,3 +411,16 @@ class HomePage(CommonPage):
         self.waitUntilPageRefreshed()
         self.waitUntilPageReady(self.lblSelectMembers)
         return self.driver.find_element(By.XPATH,self.lblSelectMembers+"//div/label[text()='"+labelName+"']/parent::div/following-sibling::div/span").text.__eq__(value)
+
+    '''
+    created By: Shivam Ojha
+    since: 05 oct 2023
+    desc: This method is used to click on Specific Travel Option Displayed
+    param: tabName
+    return: none
+    '''
+    def clickOnSpecificTravelOptionsDisplayed(self,tabName):
+        self.waitUntilPageRefreshed()
+        self.waitUntilPageReady(self.lstSpecificTabs)
+        self.driver.find_element(By.XPATH,self.lstSpecificTabs+"//div/span[contains(text(),'"+tabName+"')]").click()
+
