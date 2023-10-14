@@ -368,7 +368,7 @@ class HomePage(CommonPage):
     def clickOnMembersInputBox(self):
         self.waitUntilPageRefreshed()
         self.waitUntilPageReady(self.lblSearchBoxes)
-        self.driver.find_element(By.XPATH,self.lblSearchBoxes+"//button[contains(text(),'adults')]").click()
+        self.driver.find_element(By.XPATH,self.lblSearchBoxes+"//span[contains(text(),'adults')]").click()
 
     '''
       created By: Shivam Ojha

@@ -32,3 +32,15 @@ class FlightsPage(CommonPage):
         self.waitUntilPageReady(self.lblHeaderOptions)
         return self.driver.find_element(By.XPATH,self.lblHeaderOptions+"//ul//span[contains(text(),'"+optionName+"')]/parent::div/parent::span/parent::a/parent::li").get_attribute("class").__contains__("selected")
 
+    '''
+    created By: Shivam Ojha
+    since: 15 oct 2023
+    desc: This method is used to verify Specific Radio Button
+    param: name
+    return: boolean
+    '''
+    def verifySpecificRadioButton(self,name):
+        self.waitUntilPageRefreshed()
+        self.waitUntilPageReady(self.lblFlights)
+        return len(self.driver.find_elements(By.XPATH,self.lblFlights+"//fieldset//label//div[text()='"+name+"']/parent::span/parent::label/preceding-sibling::input[@type='radio']")) == 1
+

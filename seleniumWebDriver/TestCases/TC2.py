@@ -54,7 +54,23 @@ class SecondTestCase(unittest.TestCase,HomePage):
             homepage.clickOnSpecificMemberCountIncreaseDecreaseButtons("Rooms","sub")
 
     def test3_VerifyUserCanSelectHeaderOptions(self):
-        homepage = HomePage()
-        homepage.clickOnSpecificTravelOptionsDisplayed("Flights")
-        flightsPage = FlightsPage()
-        self.assertTrue(flightsPage.verifySpecificHeaderOptionGetSelected("Flights"))
+        try:
+            homepage = HomePage()
+            homepage.clickOnSpecificTravelOptionsDisplayed("Flights")
+            flightsPage = FlightsPage()
+            self.assertTrue(flightsPage.verifySpecificHeaderOptionGetSelected("Flights"))
+        finally:
+            self.hardRefresh()
+            self.navigateToHomePage()
+
+    def test4_VerifyRadioButtonOnFlightsTab(self):
+        try:
+            homepage = HomePage()
+            homepage.clickOnSpecificTravelOptionsDisplayed("Flights")
+            flightsPage = FlightsPage()
+            self.assertTrue(flightsPage.verifySpecificRadioButton("Round-trip"))
+            self.assertTrue(flightsPage.verifySpecificRadioButton("One-way"))
+            self.assertTrue(flightsPage.verifySpecificRadioButton("Multi-city"))
+        finally:
+            self.hardRefresh()
+            self.navigateToHomePage()
