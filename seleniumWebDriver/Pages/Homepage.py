@@ -259,8 +259,8 @@ class HomePage(CommonPage):
         self.waitUntilPageRefreshed()
         self.waitUntilPageReady(self.lblSearchBoxes)
         self.driver.find_element(By.XPATH,self.lblSearchBoxes+"//input[@name='ss']").send_keys(locationName)
-        self.waitUntilPageReady(self.lblSearchBoxes+"//ul[@data-testid]")
-        self.driver.find_element(By.XPATH,self.lblSearchBoxes+"//ul[@data-testid]/li//div[text()='"+locationName+"']").click()
+        self.waitUntilPageReady(self.lblSearchBoxes+"//ul")
+        self.driver.find_element(By.XPATH,self.lblSearchBoxes+"//ul/li//div[text()='"+locationName+"']").click()
 
     '''
       created By: Shivam Ojha

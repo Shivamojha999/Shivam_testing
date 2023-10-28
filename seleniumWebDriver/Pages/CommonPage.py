@@ -27,7 +27,7 @@ class CommonPage(Interface):
     def waitUntilPageReady(self, xpathOfElement):
         self.driver.implicitly_wait(20)
         wait = WebDriverWait(self.driver, 20)
-        wait.until(expected_conditions.visibility_of(self.driver.find_element(By.XPATH, xpathOfElement)))
+        wait.until(expected_conditions.visibility_of(self.driver.find_elements(By.XPATH, xpathOfElement)[0]))
 
     '''
     created By: Shivam Ojha

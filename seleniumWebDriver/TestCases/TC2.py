@@ -4,7 +4,6 @@ from seleniumWebDriver.Pages.FlightsPage import FlightsPage
 from seleniumWebDriver.Pages.Homepage import HomePage
 from seleniumWebDriver.Pages.SearchResultStaysPage import SearchResultStaysPage
 
-
 class SecondTestCase(unittest.TestCase,HomePage):
 
     def setUp(self):
@@ -71,6 +70,21 @@ class SecondTestCase(unittest.TestCase,HomePage):
             self.assertTrue(flightsPage.verifySpecificRadioButton("Round-trip"))
             self.assertTrue(flightsPage.verifySpecificRadioButton("One-way"))
             self.assertTrue(flightsPage.verifySpecificRadioButton("Multi-city"))
+        finally:
+            self.hardRefresh()
+            self.navigateToHomePage()
+
+    def test5_VerifyDropdownOptions(self):
+        try:
+            homepage = HomePage()
+            homepage.clickOnSpecificTravelOptionsDisplayed("Flights")
+            flightsPage = FlightsPage()
+            self.assertTrue(flightsPage.verifySpecificOptionOfClassDropdown("Business"))
+            self.assertTrue(flightsPage.verifySpecificOptionOfClassDropdown("Economy"))
+            self.assertTrue(flightsPage.verifySpecificOptionOfClassDropdown("Premium economy"))
+            self.assertTrue(flightsPage.verifySpecificOptionOfClassDropdown("First-class"))
+            flightsPage.selectSpecificOptionInClassDropdown("First-class")
+            self.assertTrue(flightsPage.verifySpecificOptionSelectedInClassDropdown("First-class"))
         finally:
             self.hardRefresh()
             self.navigateToHomePage()
