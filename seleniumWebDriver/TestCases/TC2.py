@@ -88,3 +88,19 @@ class SecondTestCase(unittest.TestCase,HomePage):
         finally:
             self.hardRefresh()
             self.navigateToHomePage()
+
+    def test6_VerifyAdultPopup(self):
+        try:
+            homepage = HomePage()
+            homepage.clickOnSpecificTravelOptionsDisplayed("Flights")
+            flightsPage = FlightsPage()
+            flightsPage.clickOnSpecificButtonInFlightPage("adult")
+            defaludValueOfAdults = int(flightsPage.getValueOfSpecificOptionOnAdultPopup("Adult"))
+            flightsPage.clickOnPlusMinusButtonOfSpecificOptionOnAdultPopup("Adult")
+            self.assertEquals(flightsPage.getValueOfSpecificOptionOnAdultPopup("Adult"),str(defaludValueOfAdults+1))
+            defaludValueOfChildren = int(flightsPage.getValueOfSpecificOptionOnAdultPopup("Children"))
+            flightsPage.clickOnPlusMinusButtonOfSpecificOptionOnAdultPopup("Children")
+            self.assertEquals(flightsPage.getValueOfSpecificOptionOnAdultPopup("Children"),str(defaludValueOfChildren+1))
+        finally:
+            self.hardRefresh()
+            self.navigateToHomePage()

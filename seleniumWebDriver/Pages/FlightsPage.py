@@ -8,6 +8,7 @@ class FlightsPage(CommonPage):
 
     lblFlights = ".//*[@id='root']"
     lblHeaderOptions = ".//header[contains(@class,'Header-module')]"
+    lblAdultPopup = ".//*[contains(@data-ui-name,'occupancy')]//label"
 
     '''
     created By: Shivam Ojha
@@ -90,4 +91,38 @@ class FlightsPage(CommonPage):
         select = Select(self.driver.find_element(By.XPATH,self.lblFlights+"//select[@title='Cabin class']"))
         select.select_by_visible_text(option)
 
+    '''
+    created By: Shivam Ojha
+    since: 18 Nov 2023
+    desc: This method is used to click On Specific Button In Flight Page
+    param: button
+    return: none
+    '''
+    def clickOnSpecificButtonInFlightPage(self,button):
+        self.waitUntilPageRefreshed()
+        self.waitUntilPageReady(self.lblFlights)
+        self.driver.find_element(By.XPATH,self.lblFlights+"//button/span[contains(text(),'"+button+"')]").click()
 
+    '''
+    created By: Shivam Ojha
+    since: 18 Nov 2023
+    desc: This method is used to click On Plus Minus Button Of Specific Option On Adult Popup
+    param: optionName,button
+    return: none
+    '''
+    def clickOnPlusMinusButtonOfSpecificOptionOnAdultPopup(self,optionName,button="plus"):
+        self.waitUntilPageRefreshed()
+        self.waitUntilPageReady(self.lblAdultPopup)
+        self.driver.find_element(By.XPATH,self.lblAdultPopup+"[contains(text(),'"+optionName+"')]/parent::div/following-sibling::div/button[contains(@data-ui-name,'"+button+"')]").click()
+
+    '''
+    created By: Shivam Ojha
+    since: 18 Nov 2023
+    desc: This method is used to get Value Of Specific Option On Adult Popup
+    param: optionName
+    return: string
+    '''
+    def getValueOfSpecificOptionOnAdultPopup(self,optionName):
+        self.waitUntilPageRefreshed()
+        self.waitUntilPageReady(self.lblAdultPopup)
+        return self.driver.find_element(By.XPATH,self.lblAdultPopup+"[contains(text(),'"+optionName+"')]/parent::div/parent::div//span[contains(@class,'InputStepper')]").text
