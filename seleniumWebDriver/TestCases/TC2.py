@@ -104,3 +104,27 @@ class SecondTestCase(unittest.TestCase,HomePage):
         finally:
             self.hardRefresh()
             self.navigateToHomePage()
+
+    def test7_verifySearchButtonColorOnFlightScreen(self):
+        try:
+            homepage = HomePage()
+            homepage.clickOnSpecificTravelOptionsDisplayed("Flights")
+            flightsPage = FlightsPage()
+            self.assertTrue(flightsPage.verifyColorOfSpecificButtonInFlightPage("Search","#ffffff"))
+        finally:
+            self.hardRefresh()
+            self.navigateToHomePage()
+
+    def test8_verifySearchFromAndToOnFlightScreen(self):
+        try:
+            homepage = HomePage()
+            homepage.clickOnSpecificTravelOptionsDisplayed("Flights")
+            flightsPage = FlightsPage()
+            flightsPage.searchAndSelectSpecificLocation("from","AMD")
+            flightsPage.searchAndSelectSpecificLocation("to","DEL")
+            flightsPage.clickOnSpecificButtonInFlightPage("Search")
+            self.assertTrue(flightsPage.verifySearchResultsDsplayed())
+
+        finally:
+            self.hardRefresh()
+            self.navigateToHomePage()
