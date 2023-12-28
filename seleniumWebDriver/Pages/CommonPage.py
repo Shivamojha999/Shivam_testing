@@ -1,4 +1,6 @@
 import datetime
+import sys
+
 from dateutil.relativedelta import relativedelta
 
 from selenium.webdriver import ActionChains
@@ -12,7 +14,8 @@ from seleniumWebDriver.webDriver.Interface import Interface
 class CommonPage(Interface):
 
     def launchUrl(self):
-        self.driver.get("https://www.booking.com/")
+        url = sys.argv[1] if len(sys.argv) > 1 else "https://www.booking.com/"
+        self.driver.get(url)
 
     def maximizeWindow(self):
         self.driver.maximize_window()
