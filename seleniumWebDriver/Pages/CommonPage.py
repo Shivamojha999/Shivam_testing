@@ -14,8 +14,7 @@ from seleniumWebDriver.webDriver.Interface import Interface
 class CommonPage(Interface):
 
     def launchUrl(self):
-        url = sys.argv[1] if len(sys.argv) > 1 else "https://www.booking.com/"
-        self.driver.get(url)
+        self.driver.get("https://www.booking.com/")
 
     def maximizeWindow(self):
         self.driver.maximize_window()
