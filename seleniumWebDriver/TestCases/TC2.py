@@ -128,6 +128,3 @@ class SecondTestCase(unittest.TestCase,HomePage):
         finally:
             self.hardRefresh()
             self.navigateToHomePage()
-
-    if __name__ == '__main__':
-        unittest.main()
