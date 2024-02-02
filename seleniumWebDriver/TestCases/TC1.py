@@ -111,6 +111,3 @@ class FirstTestCase(unittest.TestCase,HomePage):
         homepage.clickOnSearchButton()
         searchResultStaysPage = SearchResultStaysPage()
         self.assertTrue(searchResultStaysPage.verifySearchedCityDisplayed("Goa"))
-
-    if __name__ == '__main__':
-        unittest.main()
