@@ -6,8 +6,9 @@ from seleniumWebDriver.TestCases.TC1 import FirstTestCase
 
 def runSmoke() :
     smoke = unittest.TestSuite()
+    smoke.addTest(SecondTestCase("test1_VerifyFiltersOfSearchResults"))
+    smoke.addTest(SecondTestCase("test2_VerifyMembersCountChanges"))
     smoke.addTest(SecondTestCase("test3_VerifyUserCanSelectHeaderOptions"))
-    smoke.addTest(SecondTestCase("test5_VerifyDropdownOptions"))
     runner = XMLTestRunner(output='test-reports')
     runner.run(smoke)
 def runAllTcs():
@@ -19,4 +20,4 @@ def runAllTcs():
     runner.run(regression)
 
 if __name__ == '__main__':
-    runSmoke()
+    runAllTcs()

@@ -31,8 +31,7 @@ class SearchResultStaysPage(CommonPage):
     '''
     def verifySearchedCityDisplayed(self,cityName):
         self.waitUntilPageRefreshed()
-        self.waitUntilPageReady(self.lblSearchResults)
-        return self.driver.find_element(By.XPATH,self.lblSearchResults+"//h1[contains(text(),'"+cityName+"')]").is_displayed()
+        return self.driver.find_element(By.XPATH,self.lblSearchResults+"/parent::div//h1[contains(text(),'"+cityName+"')]").is_displayed()
 
     '''
     created By: Shivam Ojha

@@ -29,10 +29,19 @@ class HomePage(CommonPage):
         self.waitUntilPageRefreshed()
         self.waitUntilPageReady(self.lblPageBody)
         self.closeUnwantedPopup()
+        wait = WebDriverWait(self.driver, 20)
+        wait.until(expected_conditions.element_to_be_clickable(self.driver.find_element(By.XPATH,".//*[@data-testid='header-language-picker-trigger']")))
         self.driver.find_element(By.XPATH,".//*[@data-testid='header-language-picker-trigger']").click()
         self.clickOnSpecificLanguageOnSelectLanguagePopup("English (US)")
         self.waitUntilPageRefreshed()
-        self.driver.find_element(By.XPATH,".//*[@data-testid='header-currency-picker-trigger']").click()
+        try:
+            wait.until(expected_conditions.element_to_be_clickable(self.driver.find_element(By.XPATH,".//*[@data-testid='header-currency-picker-trigger']")))
+            self.driver.find_element(By.XPATH,".//*[@data-testid='header-currency-picker-trigger']").click()
+        except Exception :
+            self.driver.execute_script("arguments[0].click();",self.driver.find_element(By.XPATH,".//*[@data-testid='header-currency-picker-trigger']"))
+        finally:
+            wait.until(expected_conditions.element_to_be_clickable(self.driver.find_element(By.XPATH,".//*[@data-testid='header-currency-picker-trigger']")))
+            self.driver.execute_script("arguments[0].click();",self.driver.find_element(By.XPATH,".//*[@data-testid='header-currency-picker-trigger']"))
         self.clickOnSpecificCurrencyOnSelectCurrencyPopup("Indian Rupee")
         self.waitUntilPageRefreshed()
 
