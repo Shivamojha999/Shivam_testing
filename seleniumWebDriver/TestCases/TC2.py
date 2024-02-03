@@ -47,6 +47,7 @@ class SecondTestCase(unittest.TestCase,HomePage):
             self.assertTrue(homepage.verifySpecificMemberCount("Rooms",roomsCount+1))
         finally:
             self.hardRefresh()
+            homepage = HomePage()
             homepage.clickOnMembersInputBox()
             homepage.clickOnSpecificMemberCountIncreaseDecreaseButtons("Adults","sub")
             homepage.clickOnSpecificMemberCountIncreaseDecreaseButtons("Children","sub")
