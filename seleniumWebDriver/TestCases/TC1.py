@@ -21,7 +21,7 @@ class FirstTestCase(unittest.TestCase,HomePage):
         homepage.closeUnwantedPopup(self)
         self.assertTrue(homepage.verifyUnwantedPopupClosed(self))
 
-    '''def test2_VerifyAllTabsVisibleOnMainPage(self):
+    def test2_VerifyAllTabsVisibleOnMainPage(self):
         homepage = HomePage()
         self.assertTrue(homepage.verifySpecificTravelOptionsDisplayed("Stays"))
         self.assertTrue(homepage.verifySpecificTravelOptionsDisplayed("Flights"))
@@ -110,4 +110,4 @@ class FirstTestCase(unittest.TestCase,HomePage):
         homepage.selectDateOnDatePicker(futureMonth,futureDateByDay)
         homepage.clickOnSearchButton()
         searchResultStaysPage = SearchResultStaysPage()
-        self.assertTrue(searchResultStaysPage.verifySearchedCityDisplayed("Goa"))'''
+        self.assertTrue(searchResultStaysPage.verifySearchedCityDisplayed("Goa"))
