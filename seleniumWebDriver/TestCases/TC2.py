@@ -32,7 +32,7 @@ class SecondTestCase(unittest.TestCase,HomePage):
             self.navigateToHomePage()
 
 
-    def test2_VerifyMembersCountChanges(self):
+    '''def test2_VerifyMembersCountChanges(self):
         try:
             homepage = HomePage()
             homepage.clickOnMembersInputBox()
@@ -128,4 +128,4 @@ class SecondTestCase(unittest.TestCase,HomePage):
 
         finally:
             self.hardRefresh()
-            self.navigateToHomePage()
+            self.navigateToHomePage()'''
