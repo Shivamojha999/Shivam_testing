@@ -27,6 +27,9 @@ class SecondTestCase(unittest.TestCase,HomePage):
             homepage.clickOnSearchButton()
             searchResultStaysPage = SearchResultStaysPage()
             self.assertTrue(searchResultStaysPage.verifySpecificFilterOptionDisplayed("City","Old Goa"))
+        except Exception as e:
+            self.saveScreenShots("test1_VerifyFiltersOfSearchResults")
+            raise e
         finally:
             self.hardRefresh()
             self.navigateToHomePage()
@@ -45,6 +48,9 @@ class SecondTestCase(unittest.TestCase,HomePage):
             self.assertTrue(homepage.verifySpecificMemberCount("Adults",childrenCount+1))
             homepage.clickOnSpecificMemberCountIncreaseDecreaseButtons("Rooms","add")
             self.assertTrue(homepage.verifySpecificMemberCount("Rooms",roomsCount+1))
+        except Exception as e:
+            self.saveScreenShots("test2_VerifyMembersCountChanges")
+            raise e
         finally:
             self.hardRefresh()
             homepage = HomePage()
@@ -59,6 +65,9 @@ class SecondTestCase(unittest.TestCase,HomePage):
             homepage.clickOnSpecificTravelOptionsDisplayed("Flights")
             flightsPage = FlightsPage()
             self.assertTrue(flightsPage.verifySpecificHeaderOptionGetSelected("Flights"))
+        except Exception as e:
+            self.saveScreenShots("test3_VerifyUserCanSelectHeaderOptions")
+            raise e
         finally:
             self.hardRefresh()
             self.navigateToHomePage()
@@ -71,6 +80,9 @@ class SecondTestCase(unittest.TestCase,HomePage):
             self.assertTrue(flightsPage.verifySpecificRadioButton("Round-trip"))
             self.assertTrue(flightsPage.verifySpecificRadioButton("One-way"))
             self.assertTrue(flightsPage.verifySpecificRadioButton("Multi-city"))
+        except Exception as e:
+            self.saveScreenShots("test4_VerifyRadioButtonOnFlightsTab")
+            raise e
         finally:
             self.hardRefresh()
             self.navigateToHomePage()
@@ -86,6 +98,9 @@ class SecondTestCase(unittest.TestCase,HomePage):
             self.assertTrue(flightsPage.verifySpecificOptionOfClassDropdown("First-class"))
             flightsPage.selectSpecificOptionInClassDropdown("First-class")
             self.assertTrue(flightsPage.verifySpecificOptionSelectedInClassDropdown("First-class"))
+        except Exception as e:
+            self.saveScreenShots("test5_VerifyDropdownOptions")
+            raise e
         finally:
             self.hardRefresh()
             self.navigateToHomePage()
@@ -102,6 +117,9 @@ class SecondTestCase(unittest.TestCase,HomePage):
             defaludValueOfChildren = int(flightsPage.getValueOfSpecificOptionOnAdultPopup("Children"))
             flightsPage.clickOnPlusMinusButtonOfSpecificOptionOnAdultPopup("Children")
             self.assertEquals(flightsPage.getValueOfSpecificOptionOnAdultPopup("Children"),str(defaludValueOfChildren+1))
+        except Exception as e:
+            self.saveScreenShots("test6_VerifyAdultPopup")
+            raise e
         finally:
             self.hardRefresh()
             self.navigateToHomePage()
@@ -112,6 +130,9 @@ class SecondTestCase(unittest.TestCase,HomePage):
             homepage.clickOnSpecificTravelOptionsDisplayed("Flights")
             flightsPage = FlightsPage()
             self.assertTrue(flightsPage.verifyColorOfSpecificButtonInFlightPage("Search","#ffffff"))
+        except Exception as e:
+            self.saveScreenShots("test7_verifySearchButtonColorOnFlightScreen")
+            raise e
         finally:
             self.hardRefresh()
             self.navigateToHomePage()
@@ -125,7 +146,9 @@ class SecondTestCase(unittest.TestCase,HomePage):
             flightsPage.searchAndSelectSpecificLocation("to","DEL")
             flightsPage.clickOnSpecificButtonInFlightPage("Search")
             self.assertTrue(flightsPage.verifySearchResultsDsplayed())
-
+        except Exception as e:
+            self.saveScreenShots("test8_verifySearchFromAndToOnFlightScreen")
+            raise e
         finally:
             self.hardRefresh()
             self.navigateToHomePage()

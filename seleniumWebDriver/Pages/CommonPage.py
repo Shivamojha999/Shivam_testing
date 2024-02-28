@@ -166,3 +166,14 @@ class CommonPage(Interface):
         self.waitUntilPageReady(".//span[@data-testid='header-logo']")
         self.driver.find_element(By.XPATH,".//span[@data-testid='header-logo']").click()
 
+    '''
+      created By: Shivam Ojha
+      since: 15 Feb 2024
+      desc: This method is used to save Screen Shots
+      param: none
+      return: none
+      '''
+    def saveScreenShots(self,nameOfTestCase):
+        screenshot_path = "ScreenShots/"+nameOfTestCase+".png"
+        self.driver.save_screenshot(screenshot_path)
+
