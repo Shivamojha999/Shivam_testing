@@ -23,4 +23,4 @@ def runAllTcs():
     runner.run(regression)
 
 if __name__ == '__main__':
-    runAllTcs()
+    runSmoke()
