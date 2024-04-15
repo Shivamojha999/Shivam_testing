@@ -1,5 +1,6 @@
 import unittest
 
+from seleniumWebDriver.Pages.CarRentalPage import CarRentalPage
 from seleniumWebDriver.Pages.FlightsPage import FlightsPage
 from seleniumWebDriver.Pages.Homepage import HomePage
 from seleniumWebDriver.Pages.SearchResultStaysPage import SearchResultStaysPage
@@ -152,3 +153,22 @@ class SecondTestCase(unittest.TestCase,HomePage):
         finally:
             self.hardRefresh()
             self.navigateToHomePage()
+
+    def test9_VerifyUIFieldsOfCarRentalScreen(self):
+        try:
+            homepage = HomePage()
+            homepage.clickOnSpecificTravelOptionsDisplayed("Car rentals")
+            carRentalPage = CarRentalPage()
+            self.assertTrue(carRentalPage.verifyPickupLocationSearchField())
+            self.assertTrue(carRentalPage.verifySpecificDateFieldOnTravelBar("Pick-up date"))
+            self.assertTrue(carRentalPage.verifySpecificDateFieldOnTravelBar("Drop-off date"))
+            self.assertTrue(carRentalPage.verifySpecificTimeFieldOnTravelBar("pickup-time"))
+            self.assertTrue(carRentalPage.verifySpecificTimeFieldOnTravelBar("dropoff-time"))
+            self.assertTrue(carRentalPage.verifySpecificCheckBoxOnTravelBar("Drop car off at different location"))
+            self.assertTrue(carRentalPage.verifySpecificCheckBoxOnTravelBar("Driver aged 30 – 65?"))
+        except Exception as e:
+            self.saveScreenShots("test9_VerifyUIFieldsOfCarRentalScreen")
+            raise e
+        finally:
+            self.hardRefresh()
+            carRentalPage.selectBlueTabsOnCarRental("Stays")
