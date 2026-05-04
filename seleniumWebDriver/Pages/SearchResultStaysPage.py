@@ -17,7 +17,8 @@ class SearchResultStaysPage(CommonPage):
     param: none
     return: none
     '''
-    def __init__(self):
+    def __init__(self, driver):
+        self.driver = driver
         self.waitUntilPageRefreshed()
         self.waitUntilPageReady(self.lblNavigator)
         self.driver.find_element(By.XPATH,self.lblNavigator+"//div[text()='Search results']").is_displayed()

@@ -1,148 +1,131 @@
-import unittest
+import pytest
 
+from seleniumWebDriver.Pages.CommonPage import CommonPage
 from seleniumWebDriver.Pages.Homepage import HomePage
 from seleniumWebDriver.Pages.SearchResultStaysPage import SearchResultStaysPage
 
 
-class FirstTestCase(unittest.TestCase,HomePage):
+@pytest.mark.Stays
+class TestStaysPage(CommonPage):
 
-    def setUp(self):
-        self.launchUrl()
-        self.maximizeWindow()
+    @pytest.mark.smoke
+    def test_VerifySignInPopup(self):
+        homePage = HomePage(self.driver, configureDefaults=False, dismissPopup=False)
+        homePageTitleDisplayed = homePage.verifyHomePageTitle(homePage.getTitleOfPage())
+        assert homePageTitleDisplayed is True, "Home page title didn't appear"
+        popupDisplayed = homePage.verifyUnwantedPopup()
+        assert popupDisplayed is True, "Sign in popup didn't appear"
+        homePage.closeUnwantedPopup()
+        popupClosed = homePage.verifyUnwantedPopupClosed()
+        assert popupClosed is True, "Sign in popup didn't close"
 
-    def tearDown(self):
-        pass
-        #self.driver.quit()
+    @pytest.mark.smoke
+    def test_VerifyAllTabsVisibleOnMainPage(self):
+        homePage = HomePage(self.driver)
+        for tabName in ["Stays", "Flights", "Flight + Hotel", "Car rentals", "Attractions", "Airport taxis"]:
+            tabDisplayed = homePage.verifySpecificTravelOptionsDisplayed(tabName)
+            assert tabDisplayed is True, f"Travel tab '{tabName}' didn't appear"
 
-    def test1_VerifySignInPopup(self):
-        try:
-            homepage = HomePage
-            self.assertTrue(homepage.verifyHomePageTitle(self,homepage.getTitleOfPage(self)))
-            self.assertTrue(homepage.verifyUnwantedPopup(self))
-            homepage.closeUnwantedPopup(self)
-            self.assertTrue(homepage.verifyUnwantedPopupClosed(self))
-        except Exception as e:
-            self.saveScreenShots("test1_VerifySignInPopup")
-            raise e
+    def test_VerifyCurrencyScreenFunctionality(self):
+        homePage = HomePage(self.driver)
+        currencyDisplayed = homePage.verifySpecificButtonDisplayed("INR")
+        assert currencyDisplayed is True, "INR currency button didn't appear"
+        homePage.clickOnSpecificButton("INR")
+        currencyPopupDisplayed = homePage.verifySpecificAreaLabel("Select your currency", "div")
+        assert currencyPopupDisplayed is True, "Currency popup didn't appear"
+        assert homePage.verifySpecificCurrencyOnSelectCurrencyPopup("Hong Kong Dollar") is True
+        assert homePage.verifySpecificCurrencyOnSelectCurrencyPopup("United Arab Emirates Dirham") is True
+        homePage.clickOnSpecificCurrencyOnSelectCurrencyPopup("United Arab Emirates Dirham")
+        assert homePage.verifySpecificAreaLabel("Prices in United Arab Emirates Dirham") is True
+        homePage.clickOnSpecificButton("AED")
+        assert homePage.verifySpecificCurrencyOnSelectCurrencyPopup("Hong Kong Dollar") is True
+        homePage.clickOnSpecificCurrencyOnSelectCurrencyPopup("New Taiwan Dollar")
+        assert homePage.verifySpecificButtonDisplayed("TWD") is True
 
-    def test2_VerifyAllTabsVisibleOnMainPage(self):
-        try:
-            homepage = HomePage()
-            self.assertTrue(homepage.verifySpecificTravelOptionsDisplayed("Stays"))
-            self.assertTrue(homepage.verifySpecificTravelOptionsDisplayed("Flights"))
-            self.assertTrue(homepage.verifySpecificTravelOptionsDisplayed("Flight + Hotel"))
-            self.assertTrue(homepage.verifySpecificTravelOptionsDisplayed("Car rentals"))
-            self.assertTrue(homepage.verifySpecificTravelOptionsDisplayed("Attractions"))
-            self.assertTrue(homepage.verifySpecificTravelOptionsDisplayed("Airport taxis"))
-        except Exception as e:
-            self.saveScreenShots("test2_VerifyAllTabsVisibleOnMainPage")
-            raise e
+    def test_VerifySelectLanguageScreenFunctionality(self):
+        homePage = HomePage(self.driver)
+        assert homePage.verifySpecificAreaLabel("Language: English (US)") is True
+        homePage.clickOnSpecificAreaLabel("Language: English (US)")
+        assert homePage.verifySpecificAreaLabel("Select your language", "div") is True
+        assert homePage.verifySpecificLanguageOnSelectLanguagePopup("Islenska") is True
+        homePage.clickOnSpecificLanguageOnSelectLanguagePopup("Islenska")
 
-    def test3_VerifyCurrencyScreenFunctionality(self):
-        try:
-            homepage = HomePage()
-            self.assertTrue(homepage.verifySpecificButtonDisplayed("INR"))
-            homepage.clickOnSpecificButton("INR")
-            self.assertTrue(homepage.verifySpecificAreaLabel("Select your currency","div"))
-            self.assertTrue(homepage.verifySpecificCurrencyOnSelectCurrencyPopup("Hong Kong Dollar"))
-            self.assertTrue(homepage.verifySpecificCurrencyOnSelectCurrencyPopup("United Arab Emirates Dirham"))
-            homepage.clickOnSpecificCurrencyOnSelectCurrencyPopup("United Arab Emirates Dirham")
-            self.assertTrue(homepage.verifySpecificAreaLabel("Prices in United Arab Emirates Dirham"))
-            homepage.clickOnSpecificButton("AED")
-            self.assertTrue(homepage.verifySpecificCurrencyOnSelectCurrencyPopup("Hong Kong Dollar"))
-            homepage.clickOnSpecificCurrencyOnSelectCurrencyPopup("New Taiwan Dollar")
-            self.assertTrue(homepage.verifySpecificButtonDisplayed("TWD"))
-        except Exception as e:
-            self.saveScreenShots("test3_VerifyCurrencyScreenFunctionality")
-            raise e
-        finally:
-            self.hardRefresh()
-            HomePage()
+    def test_VerifyDatesApiWorking(self):
+        homePage = HomePage(self.driver)
+        assert homePage.getCurrentDate("%y/%m/%d") is not None
+        assert homePage.getCurrentDate("%#d") is not None
+        assert homePage.getPastFutureDateByDays("%Y-%m-%d", 1, "p") is not None
+        assert homePage.getPastFutureDateByMonths("%Y-%m-%d", 1, "f") is not None
+        assert homePage.getPastFutureDateByYears("%Y-%m-%d", 1, "p") is not None
 
-    def test4_VerifySelectLanguageScreenFunctionality(self):
-        try:
-            homepage = HomePage()
-            self.assertTrue(homepage.verifySpecificAreaLabel("Language: English (US)"))
-            homepage.clickOnSpecificAreaLabel("Language: English (US)")
-            self.assertTrue(homepage.verifySpecificAreaLabel("Select your language","div"))
-            self.assertTrue(homepage.verifySpecificLanguageOnSelectLanguagePopup("Íslenska"))
-            homepage.clickOnSpecificLanguageOnSelectLanguagePopup("Íslenska")
-            self.assertTrue(homepage.verifySpecificAreaLabel("Tungumál: Íslenska"))
-            homepage.clickOnSpecificAreaLabel("Tungumál: Íslenska")
-            self.assertTrue(homepage.verifySpecificLanguageOnSelectLanguagePopup("हिन्दी"))
-            homepage.clickOnSpecificLanguageOnSelectLanguagePopup("हिन्दी")
-            self.assertTrue(homepage.verifySpecificAreaLabel("भाषा: हिन्दी"))
-        except Exception as e:
-            self.saveScreenShots("test4_VerifySelectLanguageScreenFunctionality")
-            raise e
-        finally:
-            self.hardRefresh()
-            HomePage()
+    @pytest.mark.smoke
+    def test_VerifyFunctionalityOfWhereToGoSearchBox(self):
+        homePage = HomePage(self.driver)
+        homePage.clickOnSelectLocationInputBox()
+        homePage.searchAndSelectLocation("Lucknow")
+        locationSelected = homePage.verifyLocationSelected("Lucknow")
+        assert locationSelected is True, "Lucknow was not selected in destination field"
 
-    def test5_VerifyDatesApiWorking(self):
-        try:
-            homepage = HomePage()
-            homepage.getCurrentDate("%y/%m/%d")
-            homepage.getCurrentDate("%#d")
-            homepage.getPastFutureDateByDays("%Y-%m-%d",1,"p")
-            homepage.getPastFutureDateByMonths("%Y-%m-%d",1,"f")
-            homepage.getPastFutureDateByYears("%Y-%m-%d",1,"p")
-        except Exception as e:
-            self.saveScreenShots("test5_VerifyDatesApiWorking")
-            raise e
+    def test_VerifyCalenderDesign(self):
+        homePage = HomePage(self.driver)
+        currentMonth = homePage.getCurrentDate("%B")
+        futureMonth = homePage.getPastFutureDateByMonths("%B", 1, "f")
+        homePage.clickOnSelectDateInputBox()
+        assert homePage.verifyCalenderOpens() is True
+        assert homePage.verifySpecificMonthOpenedOnDatePicker(currentMonth) is True
+        assert homePage.verifySpecificMonthOpenedOnDatePicker(futureMonth) is True
 
-    def test6_VerifyFunctionalityOfWhereToGoSearchBox(self):
-        try:
-            homepage = HomePage()
-            homepage.clickOnSelectLocationInputBox()
-            homepage.searchAndSelectLocation("Lucknow")
-            self.assertTrue(homepage.verifyLocationSelected("Lucknow"))
-        except Exception as e:
-            self.saveScreenShots("test6_VerifyFunctionalityOfWhereToGoSearchBox")
-            raise e
+    def test_SelectDateVerification(self):
+        homePage = HomePage(self.driver)
+        futureMonth = homePage.getPastFutureDateByMonths("%B", 3, "f")
+        futureDate = homePage.getPastFutureDateByMonths("%#d", 3, "f")
+        futureDateByDay = homePage.getPastFutureDateByDays("%#d", 95, "f")
+        homePage.clickOnSelectDateInputBox()
+        homePage.selectDateOnDatePicker(futureMonth, futureDate)
+        homePage.selectDateOnDatePicker(futureMonth, futureDateByDay)
+        futureDateFormatted = homePage.getPastFutureDateByMonths("%b %#d", 3, "f")
+        assert homePage.verifySpecificDateSelected(futureDateFormatted) is True
 
-    def test7_VerifyCalenderDesign(self):
-        try:
-            homepage = HomePage()
-            currentMonth = homepage.getCurrentDate("%B")
-            futureMonth = homepage.getPastFutureDateByMonths("%B",1,"f")
-            homepage.clickOnSelectDateInputBox()
-            self.assertTrue(homepage.verifyCalenderOpens())
-            self.assertTrue(homepage.verifySpecificMonthOpenedOnDatePicker(currentMonth))
-            self.assertTrue(homepage.verifySpecificMonthOpenedOnDatePicker(futureMonth))
-        except Exception as e:
-            self.saveScreenShots("test7_VerifyCalenderDesign")
-            raise e
+    @pytest.mark.smoke
+    def test_VerifySearchFunctionality(self):
+        homePage = HomePage(self.driver)
+        homePage.clickOnSelectLocationInputBox()
+        homePage.searchAndSelectLocation("Goa")
+        futureMonth = homePage.getPastFutureDateByMonths("%B", 1, "f")
+        futureDate = homePage.getPastFutureDateByMonths("%#d", 1, "f")
+        futureDateByDay = homePage.getPastFutureDateByDays("%#d", 35, "f")
+        homePage.selectDateOnDatePicker(futureMonth, futureDate)
+        homePage.selectDateOnDatePicker(futureMonth, futureDateByDay)
+        homePage.clickOnSearchButton()
+        searchResultStaysPage = SearchResultStaysPage(self.driver)
+        cityDisplayed = searchResultStaysPage.verifySearchedCityDisplayed("Goa")
+        assert cityDisplayed is True, "Search result city Goa didn't appear"
 
+    @pytest.mark.smoke
+    def test_VerifyFiltersOfSearchResults(self):
+        homePage = HomePage(self.driver)
+        homePage.clickOnSelectLocationInputBox()
+        homePage.searchAndSelectLocation("Goa")
+        futureMonth = homePage.getPastFutureDateByMonths("%B", 1, "f")
+        futureDate = homePage.getPastFutureDateByMonths("%#d", 1, "f")
+        futureDateByDay = homePage.getPastFutureDateByDays("%#d", 35, "f")
+        homePage.selectDateOnDatePicker(futureMonth, futureDate)
+        homePage.selectDateOnDatePicker(futureMonth, futureDateByDay)
+        homePage.clickOnSearchButton()
+        searchResultStaysPage = SearchResultStaysPage(self.driver)
+        filterDisplayed = searchResultStaysPage.verifySpecificFilterOptionDisplayed("City", "Old Goa")
+        assert filterDisplayed is True, "Old Goa city filter didn't appear"
 
-    def test8_SelectDateVerification(self):
-        try:
-            homepage = HomePage()
-            futureMonth = homepage.getPastFutureDateByMonths("%B",3,"f")
-            futureDate = homepage.getPastFutureDateByMonths("%#d",3,"f")
-            futureDateByDay = homepage.getPastFutureDateByDays("%#d",95,"f")
-            homepage.clickOnSelectDateInputBox()
-            homepage.selectDateOnDatePicker(futureMonth,futureDate)
-            homepage.selectDateOnDatePicker(futureMonth,futureDateByDay)
-            futureDateFormatted = homepage.getPastFutureDateByMonths("%b %#d",3,"f")
-            self.assertTrue(homepage.verifySpecificDateSelected(futureDateFormatted))
-        except Exception as e:
-            self.saveScreenShots("test8_SelectDateVerification")
-            raise e
-
-    def test9_VerifySearchFunctionality(self):
-        try:
-            homepage = HomePage()
-            homepage.clickOnSelectLocationInputBox()
-            homepage.searchAndSelectLocation("Goa")
-            futureMonth = homepage.getPastFutureDateByMonths("%B",1,"f")
-            futureDate = homepage.getPastFutureDateByMonths("%#d",1,"f")
-            futureDateByDay = homepage.getPastFutureDateByDays("%#d",35,"f")
-            homepage.selectDateOnDatePicker(futureMonth,futureDate)
-            homepage.selectDateOnDatePicker(futureMonth,futureDateByDay)
-            homepage.clickOnSearchButton()
-            searchResultStaysPage = SearchResultStaysPage()
-            self.assertTrue(searchResultStaysPage.verifySearchedCityDisplayed("Goa"))
-        except Exception as e:
-            self.saveScreenShots("test9_VerifySearchFunctionality")
-            raise e
+    @pytest.mark.smoke
+    def test_VerifyMembersCountChanges(self):
+        homePage = HomePage(self.driver)
+        homePage.clickOnMembersInputBox()
+        adultsCount = homePage.getSpecificMemberCount("Adults")
+        childrenCount = homePage.getSpecificMemberCount("Children")
+        roomsCount = homePage.getSpecificMemberCount("Rooms")
+        homePage.clickOnSpecificMemberCountIncreaseDecreaseButtons("Adults", "add")
+        assert homePage.verifySpecificMemberCount("Adults", adultsCount + 1) is True
+        homePage.clickOnSpecificMemberCountIncreaseDecreaseButtons("Children", "add")
+        assert homePage.verifySpecificMemberCount("Children", childrenCount + 1) is True
+        homePage.clickOnSpecificMemberCountIncreaseDecreaseButtons("Rooms", "add")
+        assert homePage.verifySpecificMemberCount("Rooms", roomsCount + 1) is True

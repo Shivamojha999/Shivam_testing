@@ -1,8 +1,7 @@
 import datetime
-import sys
+import os
 
 from dateutil.relativedelta import relativedelta
-
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
@@ -13,167 +12,101 @@ from seleniumWebDriver.webDriver.Interface import Interface
 
 class CommonPage(Interface):
 
+    def applyHeadlessViewport(self):
+        if os.getenv("HEADLESS") == "true":
+            self.driver.set_window_size(1920, 1080)
+            self.driver.execute_cdp_cmd(
+                "Emulation.setDeviceMetricsOverride",
+                {
+                    "width": 1920,
+                    "height": 1080,
+                    "deviceScaleFactor": 1,
+                    "mobile": False,
+                },
+            )
+
     def launchUrl(self):
-        self.driver.get("https://www.booking.com/")
+        self.applyHeadlessViewport()
+        self.driver.get(self.bookingUrl)
 
     def maximizeWindow(self):
-        self.driver.maximize_window()
+        if os.getenv("HEADLESS") != "true":
+            self.driver.maximize_window()
 
-    '''
-    created By: Shivam Ojha
-    since: 18 July 2023
-    desc: This method is used to wait until element visible
-    param: xpathOfElement
-    return: none
-    '''
-    def waitUntilPageReady(self, xpathOfElement):
-        self.driver.implicitly_wait(20)
-        wait = WebDriverWait(self.driver, 20)
-        wait.until(expected_conditions.visibility_of(self.driver.find_elements(By.XPATH, xpathOfElement)[0]))
+    def waitUntilPageReady(self, xpathOfElement, timeout=None):
+        wait = WebDriverWait(self.driver, timeout or self.defaultTimeout)
+        return wait.until(expected_conditions.visibility_of_element_located((By.XPATH, xpathOfElement)))
 
-    '''
-    created By: Shivam Ojha
-    since: 18 July 2023
-    desc: This method is used to hover on any element
-    param: element
-    return: none
-    '''
+    def waitUntilElementClickable(self, xpathOfElement, timeout=None):
+        wait = WebDriverWait(self.driver, timeout or self.defaultTimeout)
+        return wait.until(expected_conditions.element_to_be_clickable((By.XPATH, xpathOfElement)))
+
     def hoverTo(self, element):
         action = ActionChains(self.driver)
         action.move_to_element(element).perform()
 
-    '''
-    created By: Shivam Ojha
-    since: 18 July 2023
-    desc: This method is used to wait Until page refreshed OR wait till all the elements of page loaded
-    param: none
-    return: none
-    '''
-    def waitUntilPageRefreshed(self):
-        # Wait for the page to be refreshed
-        WebDriverWait(self.driver, 10).until(
-            expected_conditions.presence_of_all_elements_located((By.CSS_SELECTOR, "*")))
-        # WebDriverWait(driver, 10).until(lambda driver: driver.refreshed)
+    def waitUntilPageRefreshed(self, timeout=10):
+        WebDriverWait(self.driver, timeout).until(
+            expected_conditions.presence_of_all_elements_located((By.CSS_SELECTOR, "*"))
+        )
 
-    '''
-    created By: Shivam Ojha
-    since: 18 July 2023
-    desc: This method is used to wait Until Frame Load And Switch
-    param: xpathOfFrame
-    return: none
-    '''
     def waitUntilFrameLoadAndSwitch(self, xpathOfFrame):
-        wait = WebDriverWait(self.driver, 20)
-        wait.until(expected_conditions.frame_to_be_available_and_switch_to_it(
-            self.driver.find_element(By.XPATH, xpathOfFrame)))
+        wait = WebDriverWait(self.driver, self.defaultTimeout)
+        wait.until(expected_conditions.frame_to_be_available_and_switch_to_it((By.XPATH, xpathOfFrame)))
 
-    '''
-    created By: Shivam Ojha
-    since: 18 July 2023
-    desc: This method is used to get Current Date In Specific Fromat
-    return: String
-    param: format
-    '''
     def getCurrentDate(self, format):
         return datetime.date.today().strftime(format)
 
-    '''
-    created By: Shivam Ojha
-    since: 23 July 2023
-    desc: This method is used to get Past Future Date By Days In Specific Fromat
-    return: String
-    param: format,days,pastFuture
-    '''
     def getPastFutureDateByDays(self, format, days, pastFuture):
-        if (pastFuture == "f" or pastFuture == "F"):
+        if pastFuture.lower() == "f":
             futureDate = datetime.date.today() + datetime.timedelta(days=days)
             return futureDate.strftime(format)
-        elif (pastFuture == "p" or pastFuture == "P"):
+        if pastFuture.lower() == "p":
             pastDate = datetime.date.today() - datetime.timedelta(days=days)
             return pastDate.strftime(format)
-        else:
-            return None
+        return None
 
-    '''
-    created By: Shivam Ojha
-    since: 23 July 2023
-    desc: This method is used to get Past Future Date By Months In Specific Fromat
-    return: String
-    param: format,month,pastFuture
-    '''
-    def getPastFutureDateByMonths(selfformat, format, month, pastFuture):
-        if (pastFuture == "f" or pastFuture == "F"):
+    def getPastFutureDateByMonths(self, format, month, pastFuture):
+        if pastFuture.lower() == "f":
             futureDate = datetime.date.today() + relativedelta(months=month)
             return futureDate.strftime(format)
-        elif (pastFuture == "p" or pastFuture == "P"):
+        if pastFuture.lower() == "p":
             pastDate = datetime.date.today() - relativedelta(months=month)
             return pastDate.strftime(format)
-        else:
-            return None
+        return None
 
-    '''
-    created By: Shivam Ojha
-    since: 23 July 2023
-    desc: This method is used to get Past Future Date By Years In Specific Fromat
-    return: String
-    param: format,year,pastFuture
-    '''
-    def getPastFutureDateByYears(selfformat, format, year, pastFuture):
-        if (pastFuture == "f" or pastFuture == "F"):
+    def getPastFutureDateByYears(self, format, year, pastFuture):
+        if pastFuture.lower() == "f":
             futureDate = datetime.date.today() + relativedelta(years=year)
             return futureDate.strftime(format)
-        elif (pastFuture == "p" or pastFuture == "P"):
+        if pastFuture.lower() == "p":
             pastDate = datetime.date.today() - relativedelta(years=year)
             return pastDate.strftime(format)
-        else:
-            return None
+        return None
 
-    '''
-    created By: Shivam Ojha
-    since: 05 Sept 2023
-    desc: This method is used to hard refresh any page
-    return: none
-    param: none
-    '''
     def hardRefresh(self):
         self.driver.refresh()
 
-    '''
-    created By: Shivam Ojha
-    since: 24 Sept 2023
-    desc: This method is used to scroll Using Java script
-    param: xpathOfElements, targetText
-    return: webElement
-    '''
     def scrollUsingJs(self, xpathOfElements, targetText):
         self.waitUntilPageRefreshed()
         elements = self.driver.find_elements(By.XPATH, xpathOfElements)
-        for i in range(len(elements)):
-            self.driver.execute_script("arguments[0].scrollIntoView(false);", elements[i])
-            if (elements[i].text.__contains__(targetText)):
-                return elements[i]
+        for element in elements:
+            self.driver.execute_script("arguments[0].scrollIntoView(false);", element)
+            if targetText in element.text:
+                return element
         return None
 
-    '''
-      created By: Shivam Ojha
-      since: 04 Oct 2023
-      desc: This method is used to navigate To HomePage
-      param: none
-      return: none
-      '''
     def navigateToHomePage(self):
         self.waitUntilPageRefreshed()
-        self.waitUntilPageReady(".//span[@data-testid='header-logo']")
-        self.driver.find_element(By.XPATH,".//span[@data-testid='header-logo']").click()
+        self.waitUntilElementClickable(".//span[@data-testid='header-logo']").click()
 
-    '''
-      created By: Shivam Ojha
-      since: 15 Feb 2024
-      desc: This method is used to save Screen Shots
-      param: none
-      return: none
-      '''
-    def saveScreenShots(self,nameOfTestCase):
-        screenshot_path = "ScreenShots/"+nameOfTestCase+".png"
-        self.driver.save_screenshot(screenshot_path)
+    def saveScreenShots(self, nameOfTestCase):
+        projectPath = os.getcwd()
+        screenShotsDir = os.path.join(projectPath, "ScreenShots")
+        os.makedirs(screenShotsDir, exist_ok=True)
+        screenshotPath = os.path.join(screenShotsDir, f"{nameOfTestCase}.png")
+        self.driver.save_screenshot(screenshotPath)
+        return screenshotPath
 
+    def saveScreenShotsOnCleanUp(self, nameOfTestCase):
+        return self.saveScreenShots(nameOfTestCase)

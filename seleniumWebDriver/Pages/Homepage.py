@@ -8,12 +8,12 @@ from seleniumWebDriver.Pages.CommonPage import CommonPage
 
 class HomePage(CommonPage):
 
-    lblPageBody = ".//*[@id='b2indexPage']"
+    lblPageBody = ".//body"
     lblUnwantedPopup = ".//*[@role='dialog']"
     lstSpecificTabs = ".//*[@aria-label='What are you looking for?']"
     lblSelectCurrency = ".//div[@aria-label='Select your currency']"
     lblSelectLanguage = ".//div[@data-testid='selection-modal']"
-    lblSearchBoxes = ".//div[@class='hero-banner-searchbox']"
+    lblSearchBoxes = ".//form[@aria-label='Search properties']"
     lblDatePicker = ".//div[@data-testid='searchbox-datepicker-calendar']"
     btnSearch = ".//button[@type='submit']"
     lblSelectMembers = ".//div[@data-testid='occupancy-popup']"
@@ -25,24 +25,29 @@ class HomePage(CommonPage):
     return: none
     param: none
     '''
-    def __init__(self):
+    def __init__(self, driver, configureDefaults=True, dismissPopup=True):
+        self.driver = driver
         self.waitUntilPageRefreshed()
         self.waitUntilPageReady(self.lblPageBody)
-        self.closeUnwantedPopup()
+        if dismissPopup:
+            self.closeUnwantedPopup()
+        if not configureDefaults:
+            return
         wait = WebDriverWait(self.driver, 20)
-        wait.until(expected_conditions.element_to_be_clickable(self.driver.find_element(By.XPATH,".//*[@data-testid='header-language-picker-trigger']")))
-        self.driver.find_element(By.XPATH,".//*[@data-testid='header-language-picker-trigger']").click()
-        self.clickOnSpecificLanguageOnSelectLanguagePopup("English (US)")
+        languageTriggers = self.driver.find_elements(By.XPATH, ".//*[@data-testid='header-language-picker-trigger']")
+        if len(languageTriggers) > 0:
+            wait.until(expected_conditions.element_to_be_clickable(languageTriggers[0]))
+            languageTriggers[0].click()
+            self.clickOnSpecificLanguageOnSelectLanguagePopup(self.defaultLanguage)
         self.waitUntilPageRefreshed()
-        try:
-            wait.until(expected_conditions.element_to_be_clickable(self.driver.find_element(By.XPATH,".//*[@data-testid='header-currency-picker-trigger']")))
-            self.driver.find_element(By.XPATH,".//*[@data-testid='header-currency-picker-trigger']").click()
-        except Exception :
-            self.driver.execute_script("arguments[0].click();",self.driver.find_element(By.XPATH,".//*[@data-testid='header-currency-picker-trigger']"))
-        finally:
-            wait.until(expected_conditions.element_to_be_clickable(self.driver.find_element(By.XPATH,".//*[@data-testid='header-currency-picker-trigger']")))
-            self.driver.execute_script("arguments[0].click();",self.driver.find_element(By.XPATH,".//*[@data-testid='header-currency-picker-trigger']"))
-        self.clickOnSpecificCurrencyOnSelectCurrencyPopup("Indian Rupee")
+        currencyTriggers = self.driver.find_elements(By.XPATH, ".//*[@data-testid='header-currency-picker-trigger']")
+        if len(currencyTriggers) > 0:
+            try:
+                wait.until(expected_conditions.element_to_be_clickable(currencyTriggers[0]))
+                currencyTriggers[0].click()
+            except Exception:
+                self.driver.execute_script("arguments[0].click();", currencyTriggers[0])
+            self.clickOnSpecificCurrencyOnSelectCurrencyPopup(self.defaultCurrency)
         self.waitUntilPageRefreshed()
 
     '''
@@ -293,7 +298,10 @@ class HomePage(CommonPage):
     def clickOnSelectDateInputBox(self):
         self.waitUntilPageRefreshed()
         self.waitUntilPageReady(self.lblSearchBoxes)
-        self.driver.find_element(By.XPATH,self.lblSearchBoxes+"//div[@data-testid='searchbox-dates-container']").click()
+        dateFields = self.driver.find_elements(By.XPATH, self.lblSearchBoxes+"//div[@data-testid='searchbox-dates-container']")
+        if len(dateFields) == 0:
+            dateFields = self.driver.find_elements(By.XPATH, self.lblSearchBoxes+"//*[@data-testid='date-display-field-start']")
+        dateFields[0].click()
 
     '''
       created By: Shivam Ojha
@@ -377,7 +385,10 @@ class HomePage(CommonPage):
     def clickOnMembersInputBox(self):
         self.waitUntilPageRefreshed()
         self.waitUntilPageReady(self.lblSearchBoxes)
-        self.driver.find_element(By.XPATH,self.lblSearchBoxes+"//span[contains(text(),'adults')]").click()
+        memberFields = self.driver.find_elements(By.XPATH,self.lblSearchBoxes+"//span[contains(text(),'adults')]")
+        if len(memberFields) == 0:
+            memberFields = self.driver.find_elements(By.XPATH,self.lblSearchBoxes+"//*[@data-testid='occupancy-config']")
+        memberFields[0].click()
 
     '''
       created By: Shivam Ojha
@@ -419,7 +430,7 @@ class HomePage(CommonPage):
     def verifySpecificMemberCount(self,labelName,value):
         self.waitUntilPageRefreshed()
         self.waitUntilPageReady(self.lblSelectMembers)
-        return self.driver.find_element(By.XPATH,self.lblSelectMembers+"//div/label[text()='"+labelName+"']/parent::div/following-sibling::div/span").text.__eq__(value)
+        return self.driver.find_element(By.XPATH,self.lblSelectMembers+"//div/label[text()='"+labelName+"']/parent::div/following-sibling::div/span").text.__eq__(str(value))
 
     '''
     created By: Shivam Ojha
