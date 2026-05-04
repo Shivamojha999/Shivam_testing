@@ -1,7 +1,12 @@
-from abc import ABC, abstractmethod
-from selenium import webdriver
+from abc import ABC
+
+from selenium.webdriver.remote.webdriver import WebDriver
+
 
 class Interface(ABC):
+    driver: WebDriver
 
-    driver = webdriver.Edge()
-    #driver2 = webdriver.Edge()
+    bookingUrl = "https://www.booking.com/"
+    defaultLanguage = "English (US)"
+    defaultCurrency = "Indian Rupee"
+    defaultTimeout = 20

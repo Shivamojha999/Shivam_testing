@@ -2,7 +2,6 @@ import re
 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
-from matplotlib.colors import to_hex
 
 from seleniumWebDriver.Pages.CommonPage import CommonPage
 
@@ -24,10 +23,11 @@ class FlightsPage(CommonPage):
     param: none
     return: none
     '''
-    def __init__(self):
+    def __init__(self, driver):
+        self.driver = driver
         self.waitUntilPageRefreshed()
         self.waitUntilPageReady(self.lblFlights)
-        self.driver.find_element(By.XPATH,self.lblFlights+"//h1[contains(text(),'Compare and book flights with ease')]").is_displayed()
+        self.driver.find_element(By.XPATH,self.lblFlights+"//h1[contains(.,'Compare and book')]").is_displayed()
 
     '''
     created By: Shivam Ojha
@@ -38,6 +38,9 @@ class FlightsPage(CommonPage):
     '''
     def verifySpecificHeaderOptionGetSelected(self,optionName):
         self.waitUntilPageRefreshed()
+        selectedOptions = self.driver.find_elements(By.XPATH,".//*[@role='menuitem' and .//span[contains(text(),'"+optionName+"')]]")
+        if len(selectedOptions) > 0:
+            return selectedOptions[0].get_attribute("aria-current") == "page"
         self.waitUntilPageReady(self.lblHeaderOptions)
         return self.driver.find_element(By.XPATH,self.lblHeaderOptions+"//ul//span[contains(text(),'"+optionName+"')]/parent::div/parent::span/parent::a/parent::li").get_attribute("class").__contains__("selected")
 
@@ -145,10 +148,9 @@ class FlightsPage(CommonPage):
         self.waitUntilPageRefreshed()
         self.waitUntilPageReady(self.lblFlights)
         rgba_string = self.driver.find_element(By.XPATH,self.lblFlights+"//button/span[contains(text(),'"+button+"')]").value_of_css_property('color')
-        rgba_values=[]
-        for value in re.findall(r'\d+\.\d+|\d+', rgba_string):
-            rgba_values.append(float(value)/255.0)
-        return to_hex(rgba_values[:-1]).__eq__(color)
+        rgbValues = [int(float(value)) for value in re.findall(r'\d+\.\d+|\d+', rgba_string)[:3]]
+        hexColor = "#{:02x}{:02x}{:02x}".format(rgbValues[0], rgbValues[1], rgbValues[2])
+        return hexColor.__eq__(color)
 
     '''
     created By: Shivam Ojha
@@ -172,7 +174,7 @@ class FlightsPage(CommonPage):
     def clickOnCrossIconForSpecificLocation(self,locationName):
         self.waitUntilPageRefreshed()
         self.waitUntilPageReady(self.txtSearchLocation+"/parent::div")
-        self.driver.find_element(By.XPATH,self.txtSearchLocation+"/parent::div/span/span[contains(text(),"+locationName+")]/following-sibling::span").click()
+        self.driver.find_element(By.XPATH,self.txtSearchLocation+"/parent::div/span/span[contains(text(),'"+locationName+"')]/following-sibling::span").click()
 
     '''
     created By: Shivam Ojha
